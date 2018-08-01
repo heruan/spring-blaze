@@ -8,23 +8,32 @@ import javax.persistence.Id;
 
 @Entity
 public class Person implements Serializable {
-	
-	@Id
-	@GeneratedValue
-	private Long id;
-	
-	private String name;
 
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String name;
+
+    private String primaryEmailAddress;
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPrimaryEmailAddress() {
+        return this.primaryEmailAddress;
+    }
+
+    public void setPrimaryEmailAddress(String primaryEmailAddress) {
+        this.primaryEmailAddress = primaryEmailAddress;
+    }
 }

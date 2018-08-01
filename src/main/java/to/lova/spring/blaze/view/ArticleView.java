@@ -7,10 +7,10 @@ import to.lova.spring.blaze.entity.Article;
 
 @EntityView(Article.class)
 public interface ArticleView {
-	
-	Long getId();
-	
-	@Mapping("author.name")
-	String getAuthorName();
+
+    Long getId();
+
+    @Mapping("author.name")
+    String getAuthorName();
 
 }

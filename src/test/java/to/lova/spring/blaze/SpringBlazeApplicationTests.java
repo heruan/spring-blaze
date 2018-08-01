@@ -22,41 +22,41 @@ import to.lova.spring.blaze.repository.ArticleViewRepository;
 @ContextConfiguration(classes = BlazeConfiguration.class)
 public class SpringBlazeApplicationTests {
 
-	@Autowired
-	private TestEntityManager em;
-	
-	private Article article;
-	
-	@BeforeEach
-	public void populateRepository() {
-		var p1 = new Person();
-		p1.setName("Giovanni");
-		em.persist(p1);
-		
-		var a1 = new Article();
-		a1.setAuthor(p1);
-		this.article = em.persist(a1);
-		
-		em.flush();
-		em.clear();
-	}
+    @Autowired
+    private TestEntityManager em;
 
-	@Test
-	public void testFindAll(@Autowired ArticleRepository repository) {
-		var articles = repository.findAll();
-		assertEquals(1, articles.size());
-	}
-	
-	@Test
-	public void testFindAllViews(@Autowired ArticleViewRepository repository) {
-		var articles = repository.findAll();
-		assertEquals(1, articles.size());
-	}
-	
-	@Test
-	public void testFindViewById(@Autowired ArticleViewRepository repository) {
-		var view = repository.findById(this.article.getId());
-		assertTrue(view.isPresent());
-	}
-	
+    private Article article;
+
+    @BeforeEach
+    public void populateRepository() {
+        var p1 = new Person();
+        p1.setName("Giovanni");
+        em.persist(p1);
+
+        var a1 = new Article();
+        a1.setAuthor(p1);
+        this.article = em.persist(a1);
+
+        em.flush();
+        em.clear();
+    }
+
+    @Test
+    public void testFindAll(@Autowired ArticleRepository repository) {
+        var articles = repository.findAll();
+        assertEquals(1, articles.size());
+    }
+
+    @Test
+    public void testFindAllViews(@Autowired ArticleViewRepository repository) {
+        var articles = repository.findAll();
+        assertEquals(1, articles.size());
+    }
+
+    @Test
+    public void testFindViewById(@Autowired ArticleViewRepository repository) {
+        var view = repository.findById(this.article.getId());
+        assertTrue(view.isPresent());
+    }
+
 }

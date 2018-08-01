@@ -13,30 +13,30 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Article implements Serializable {
-	
-	@Id
-	@GeneratedValue
-	private Long id;
-	
-	@ElementCollection
-	private Map<Locale, String> title = new HashMap<>();
-	
-	@ManyToOne
-	private Person author;
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public Map<Locale, String> getTitle() {
-		return title;
-	}
-	
-	public Person getAuthor() {
-		return author;
-	}
-	
-	public void setAuthor(Person author) {
-		this.author = author;
-	}
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @ElementCollection
+    private Map<Locale, String> title = new HashMap<>();
+
+    @ManyToOne
+    private Person author;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Map<Locale, String> getTitle() {
+        return title;
+    }
+
+    public Person getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Person author) {
+        this.author = author;
+    }
 }

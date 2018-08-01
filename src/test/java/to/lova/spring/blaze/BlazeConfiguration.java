@@ -25,23 +25,23 @@ import com.blazebit.persistence.view.spi.EntityViewConfiguration;
 @EnableJpaRepositories(basePackages = "to.lova", repositoryFactoryBeanClass = BlazePersistenceRepositoryFactoryBean.class)
 public class BlazeConfiguration {
 
-	@PersistenceUnit
-	private EntityManagerFactory entityManagerFactory;
+    @PersistenceUnit
+    private EntityManagerFactory entityManagerFactory;
 
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-	@Lazy(false)
-	public CriteriaBuilderFactory createCriteriaBuilderFactory() {
-		CriteriaBuilderConfiguration config = Criteria.getDefault();
-		return config.createCriteriaBuilderFactory(entityManagerFactory);
-	}
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+    @Lazy(false)
+    public CriteriaBuilderFactory createCriteriaBuilderFactory() {
+        CriteriaBuilderConfiguration config = Criteria.getDefault();
+        return config.createCriteriaBuilderFactory(this.entityManagerFactory);
+    }
 
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-	@Lazy(false)
-	public EntityViewManager createEntityViewManager(CriteriaBuilderFactory cbf,
-			EntityViewConfiguration entityViewConfiguration) {
-		return entityViewConfiguration.createEntityViewManager(cbf);
-	}
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+    @Lazy(false)
+    public EntityViewManager createEntityViewManager(CriteriaBuilderFactory cbf,
+            EntityViewConfiguration entityViewConfiguration) {
+        return entityViewConfiguration.createEntityViewManager(cbf);
+    }
 
 }
