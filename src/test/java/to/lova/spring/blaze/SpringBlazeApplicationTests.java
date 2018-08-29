@@ -1,6 +1,7 @@
 package to.lova.spring.blaze;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +46,13 @@ public class SpringBlazeApplicationTests {
     public void testFindAll(@Autowired ArticleRepository repository) {
         var articles = repository.findAll();
         assertEquals(1, articles.size());
+    }
+
+    @Test
+    public void testRepositorySave(@Autowired ArticleRepository repository) {
+        var a1 = new Article();
+        repository.save(a1);
+        assertNotNull(a1.getId());
     }
 
     @Test
