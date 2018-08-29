@@ -15,7 +15,7 @@ public class Person implements Serializable {
 
     private String name;
 
-    private String primaryEmailAddress;
+    private String emailAddress;
 
     public Long getId() {
         return this.id;
@@ -29,11 +29,11 @@ public class Person implements Serializable {
         this.name = name;
     }
 
-    public String getPrimaryEmailAddress() {
-        return this.primaryEmailAddress;
+    public String getEmailAddress() {
+        return this.emailAddress;
     }
 
-    public void setPrimaryEmailAddress(String primaryEmailAddress) {
-        this.primaryEmailAddress = primaryEmailAddress;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 }

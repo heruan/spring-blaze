@@ -3,18 +3,18 @@ package to.lova.spring.blaze.view;
 import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
 import com.blazebit.persistence.view.UpdatableEntityView;
-import com.blazebit.persistence.view.UpdatableMapping;
 
-import to.lova.spring.blaze.entity.Article;
+import to.lova.spring.blaze.entity.Person;
 
-@EntityView(Article.class)
+@EntityView(Person.class)
 @UpdatableEntityView
-public interface ArticleView {
+public interface PersonView {
 
     @IdMapping
     Long getId();
 
-    @UpdatableMapping
-    PersonView getAuthor();
+    String getName();
+
+    void setName(String name);
 
 }

@@ -31,14 +31,14 @@ public class SpringBlazeApplicationTests {
     public void populateRepository() {
         var p1 = new Person();
         p1.setName("Giovanni");
-        em.persist(p1);
+        this.em.persist(p1);
 
         var a1 = new Article();
         a1.setAuthor(p1);
-        this.article = em.persist(a1);
+        this.article = this.em.persist(a1);
 
-        em.flush();
-        em.clear();
+        this.em.flush();
+        this.em.clear();
     }
 
     @Test
@@ -57,6 +57,14 @@ public class SpringBlazeApplicationTests {
     public void testFindViewById(@Autowired ArticleViewRepository repository) {
         var view = repository.findById(this.article.getId());
         assertTrue(view.isPresent());
+    }
+
+    @Test
+    public void testUpdatableEntityViewSave(
+            @Autowired ArticleViewRepository repository) {
+        var view = repository.findById(this.article.getId()).orElseThrow();
+        view.getAuthor().setName("Foo");
+        repository.save(view);
     }
 
 }

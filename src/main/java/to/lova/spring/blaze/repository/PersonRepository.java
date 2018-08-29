@@ -6,6 +6,4 @@ import to.lova.spring.blaze.entity.Person;
 
 public interface PersonRepository extends CrudRepository<Person, Long> {
 
-    long countByPrimaryEmailAddress(String emailAddress);
-
 }
