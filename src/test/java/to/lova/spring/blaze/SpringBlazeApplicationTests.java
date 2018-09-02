@@ -4,6 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +22,7 @@ import to.lova.spring.blaze.entity.Article;
 import to.lova.spring.blaze.entity.Person;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
+import to.lova.spring.blaze.repository.PersonViewRepository;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -73,6 +79,18 @@ public class SpringBlazeApplicationTests {
         var view = repository.findById(this.article.getId()).orElseThrow();
         view.getAuthor().setName("Foo");
         repository.save(view);
+    }
+
+    @Test
+    public void testCorrelatedSubquery(
+            @Autowired PersonViewRepository repository) {
+        repository.findAll((root, query, builder) -> {
+            Subquery<Article> subquery = query.subquery(Article.class);
+            Root<Person> correlation = subquery.correlate(root);
+            Join<Person, Article> articles = correlation.join("articles");
+            Predicate predicate = builder.like(articles.get("title"), "FOO");
+            return builder.exists(subquery.select(articles).where(predicate));
+        });
     }
 
 }

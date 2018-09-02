@@ -6,7 +6,6 @@ import javax.persistence.PersistenceUnit;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
@@ -21,7 +20,6 @@ import com.blazebit.persistence.view.EntityViewManager;
 import com.blazebit.persistence.view.spi.EntityViewConfiguration;
 
 @Configuration
-@ComponentScan("to.lova")
 @EntityScan("to.lova")
 @EnableEntityViews("to.lova")
 @EnableJpaRepositories(basePackages = "to.lova",
