@@ -122,9 +122,9 @@ public class SpringBlazeApplicationTests {
     }
 
     @Test
-    public void testSpecificationParameter(
-            @Autowired PersonRepository repository) {
-        repository.countByName("Giovanni");
+    public void testCountByQuery(@Autowired PersonRepository repository) {
+        var actual = repository.countByName("Giovanni");
+        assertEquals(1, actual);
     }
 
 }
