@@ -9,6 +9,8 @@ import to.lova.spring.blaze.entity.Article;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
+    boolean existsByAuthorName(String name);
+
     long countByAuthorName(String name);
 
     @Query("select a from Article a")

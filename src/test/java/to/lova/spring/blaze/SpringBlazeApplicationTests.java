@@ -18,11 +18,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.blazebit.persistence.view.EntityViewManager;
+
 import to.lova.spring.blaze.entity.Article;
 import to.lova.spring.blaze.entity.Person;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
 import to.lova.spring.blaze.repository.PersonViewRepository;
+import to.lova.spring.blaze.view.PersonView;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -74,11 +77,28 @@ public class SpringBlazeApplicationTests {
     }
 
     @Test
+    public void testCreatableEntityViewSave(
+            @Autowired PersonViewRepository personRepository,
+            @Autowired EntityViewManager evm) {
+        var person = evm.create(PersonView.class);
+        person.setName("Foo");
+        personRepository.save(person);
+
+        var name = personRepository.findById(person.getId()).orElseThrow()
+                .getName();
+        assertEquals("Foo", name);
+    }
+
+    @Test
     public void testUpdatableEntityViewSave(
             @Autowired ArticleViewRepository repository) {
         var view = repository.findById(this.article.getId()).orElseThrow();
         view.getAuthor().setName("Foo");
-        repository.save(view);
+        repository.saveAndFlush(view);
+
+        var name = repository.findById(this.article.getId()).orElseThrow()
+                .getAuthor().getName();
+        assertEquals("Foo", name);
     }
 
     @Test
@@ -91,6 +111,13 @@ public class SpringBlazeApplicationTests {
             Predicate predicate = builder.like(articles.get("title"), "FOO");
             return builder.exists(subquery.select(articles).where(predicate));
         });
+    }
+
+    @Test
+    public void testExistsByQuery(
+            @Autowired ArticleRepository articleRepository) {
+        var actual = articleRepository.existsByAuthorName("Giovanni");
+        assertTrue(actual);
     }
 
 }

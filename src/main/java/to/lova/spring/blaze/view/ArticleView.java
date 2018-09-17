@@ -17,4 +17,6 @@ public interface ArticleView {
     @UpdatableMapping
     PersonView getAuthor();
 
+    void setAuthor(PersonView person);
+
 }
