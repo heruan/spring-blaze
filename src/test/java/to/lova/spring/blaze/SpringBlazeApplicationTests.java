@@ -24,6 +24,7 @@ import to.lova.spring.blaze.entity.Article;
 import to.lova.spring.blaze.entity.Person;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
+import to.lova.spring.blaze.repository.PersonRepository;
 import to.lova.spring.blaze.repository.PersonViewRepository;
 import to.lova.spring.blaze.view.PersonView;
 
@@ -118,6 +119,12 @@ public class SpringBlazeApplicationTests {
             @Autowired ArticleRepository articleRepository) {
         var actual = articleRepository.existsByAuthorName("Giovanni");
         assertTrue(actual);
+    }
+
+    @Test
+    public void testSpecificationParameter(
+            @Autowired PersonRepository repository) {
+        repository.countByName("Giovanni");
     }
 
 }
