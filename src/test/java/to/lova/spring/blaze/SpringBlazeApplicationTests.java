@@ -127,4 +127,11 @@ public class SpringBlazeApplicationTests {
         assertEquals(1, actual);
     }
 
+    @Test
+    public void testFindOne(@Autowired ArticleRepository repository) {
+        var view = repository.findOne((root, query, builder) -> builder
+                .equal(root.get("id"), this.article.getId()));
+        assertNotNull(view);
+    }
+
 }
