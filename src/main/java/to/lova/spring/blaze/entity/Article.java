@@ -25,15 +25,15 @@ public class Article implements Serializable {
     private Person author;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public Map<Locale, String> getTitle() {
-        return title;
+        return this.title;
     }
 
     public Person getAuthor() {
-        return author;
+        return this.author;
     }
 
     public void setAuthor(Person author) {

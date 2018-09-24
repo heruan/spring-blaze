@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Locale;
+
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -21,9 +23,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.blazebit.persistence.view.EntityViewManager;
 
 import to.lova.spring.blaze.entity.Article;
+import to.lova.spring.blaze.entity.Configuration;
 import to.lova.spring.blaze.entity.Person;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
+import to.lova.spring.blaze.repository.ConfigurationRepository;
+import to.lova.spring.blaze.repository.ConfigurationViewRepository;
 import to.lova.spring.blaze.repository.PersonRepository;
 import to.lova.spring.blaze.repository.PersonViewRepository;
 import to.lova.spring.blaze.view.PersonView;
@@ -132,6 +137,30 @@ public class SpringBlazeApplicationTests {
         var view = repository.findOne((root, query, builder) -> builder
                 .equal(root.get("id"), this.article.getId()));
         assertNotNull(view);
+    }
+
+    @Test
+    public void testNestedEmbeddables(
+            @Autowired ConfigurationRepository repository,
+            @Autowired ConfigurationViewRepository viewRepository) {
+        var c = repository.save(new Configuration());
+        var v = repository.findOne((root, query, builder) -> builder
+                .equal(root.get("id"), c.getId()));
+        this.em.flush();
+        this.em.clear();
+        v.getLoginConfiguration().getMessageBar().getLocalizedValues()
+                .put(Locale.ENGLISH, "foo");
+        v.getLoginConfiguration().getMessageBar().getLocalizedValues()
+                .put(Locale.ITALIAN, "foo");
+        v.getLoginConfiguration().getMessageFoo().getLocalizedValues()
+                .put(Locale.ENGLISH, "foo");
+        v.getLoginConfiguration().getMessageFoo().getLocalizedValues()
+                .put(Locale.ITALIAN, "foo");
+        viewRepository.save(v);
+        this.em.flush();
+        this.em.clear();
+        repository.findOne((root, query, builder) -> builder
+                .equal(root.get("id"), c.getId()));
     }
 
 }
