@@ -23,7 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.blazebit.persistence.view.EntityViewManager;
 
 import to.lova.spring.blaze.entity.Article;
-import to.lova.spring.blaze.entity.Configuration;
+import to.lova.spring.blaze.entity.HotspotConfiguration;
 import to.lova.spring.blaze.entity.Person;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
@@ -143,18 +143,14 @@ public class SpringBlazeApplicationTests {
     public void testNestedEmbeddables(
             @Autowired ConfigurationRepository repository,
             @Autowired ConfigurationViewRepository viewRepository) {
-        var c = repository.save(new Configuration());
+        var c = repository.save(new HotspotConfiguration());
         var v = repository.findOne((root, query, builder) -> builder
                 .equal(root.get("id"), c.getId()));
         this.em.flush();
         this.em.clear();
-        v.getLoginConfiguration().getMessageBar().getLocalizedValues()
+        v.getLoginConfiguration().getWelcomeMessage().getLocalizedValues()
                 .put(Locale.ENGLISH, "foo");
-        v.getLoginConfiguration().getMessageBar().getLocalizedValues()
-                .put(Locale.ITALIAN, "foo");
-        v.getLoginConfiguration().getMessageFoo().getLocalizedValues()
-                .put(Locale.ENGLISH, "foo");
-        v.getLoginConfiguration().getMessageFoo().getLocalizedValues()
+        v.getLoginConfiguration().getWelcomeMessage().getLocalizedValues()
                 .put(Locale.ITALIAN, "foo");
         viewRepository.save(v);
         this.em.flush();

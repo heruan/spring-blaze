@@ -1,48 +1,72 @@
+/*-
+ * Copyright 2017-2018 Axians SAIV S.p.A.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-*/
 package to.lova.spring.blaze.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotBlank;
 
-@Entity
-public class Configuration implements Serializable {
+import org.hibernate.annotations.NaturalId;
+
+@MappedSuperclass
+public abstract class Configuration implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Embedded
-    private LoginConfiguration loginConfiguration;
+    @NotBlank
+    @NaturalId
+    private String name;
+
+    protected Configuration(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return this.id;
     }
 
-    public LoginConfiguration getLoginConfiguration() {
-        return this.loginConfiguration;
+    public String getName() {
+        return this.name;
     }
 
-    @Embeddable
-    public static class LoginConfiguration implements Serializable {
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.name);
+    }
 
-        @Embedded
-        private LocalizedString messageFoo;
-
-        @Embedded
-        private LocalizedString messageBar;
-
-        public LocalizedString getMessageFoo() {
-            return this.messageFoo;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
-
-        public LocalizedString getMessageBar() {
-            return this.messageBar;
+        if (obj == null) {
+            return false;
         }
-
+        if (!(obj instanceof Configuration)) {
+            return false;
+        }
+        Configuration other = (Configuration) obj;
+        return Objects.equals(this.name, other.name);
     }
 
 }

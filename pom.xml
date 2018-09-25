@@ -98,6 +98,11 @@
     </build>
 
     <repositories>
+    <repository>
+            <id>forks-releases</id>
+            <name>Axians Forks</name>
+            <url>https://maven.axians.it/repository/forks-releases</url>
+        </repository>
         <repository>
             <id>spring-snapshots</id>
             <name>Spring Snapshots</name>
