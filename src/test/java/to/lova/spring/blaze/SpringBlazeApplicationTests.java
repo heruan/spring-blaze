@@ -24,9 +24,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.blazebit.persistence.view.EntityViewManager;
 
 import to.lova.spring.blaze.entity.Article;
+import to.lova.spring.blaze.entity.CustomerSummaryRepository;
 import to.lova.spring.blaze.entity.HotspotConfiguration;
 import to.lova.spring.blaze.entity.Person;
-import to.lova.spring.blaze.entity.ShippingAddressSummary;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
 import to.lova.spring.blaze.repository.ConfigurationRepository;
@@ -165,8 +165,9 @@ public class SpringBlazeApplicationTests {
     }
 
     @Test
-    public void testBooleanMapping(@Autowired EntityViewManager evm) {
-        evm.find(this.em.getEntityManager(), ShippingAddressSummary.class, "A");
+    public void testBooleanMapping(
+            @Autowired CustomerSummaryRepository repository) {
+        repository.findAll();
     }
 
 }
