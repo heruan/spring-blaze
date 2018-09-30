@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Locale;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -25,6 +26,7 @@ import com.blazebit.persistence.view.EntityViewManager;
 import to.lova.spring.blaze.entity.Article;
 import to.lova.spring.blaze.entity.HotspotConfiguration;
 import to.lova.spring.blaze.entity.Person;
+import to.lova.spring.blaze.entity.ShippingAddressSummary;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
 import to.lova.spring.blaze.repository.ConfigurationRepository;
@@ -41,10 +43,13 @@ public class SpringBlazeApplicationTests {
     @Autowired
     private TestEntityManager em;
 
+    private CriteriaBuilder cb;
+
     private Article article;
 
     @BeforeEach
     public void populateRepository() {
+        this.cb = this.em.getEntityManager().getCriteriaBuilder();
         var p1 = new Person();
         p1.setName("Giovanni");
         this.em.persist(p1);
@@ -157,6 +162,11 @@ public class SpringBlazeApplicationTests {
         this.em.clear();
         repository.findOne((root, query, builder) -> builder
                 .equal(root.get("id"), c.getId()));
+    }
+
+    @Test
+    public void testBooleanMapping(@Autowired EntityViewManager evm) {
+        evm.find(this.em.getEntityManager(), ShippingAddressSummary.class, "A");
     }
 
 }
