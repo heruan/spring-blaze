@@ -24,9 +24,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.blazebit.persistence.view.EntityViewManager;
 
+import to.lova.spring.blaze.entity.AbstractCustomer_;
 import to.lova.spring.blaze.entity.Article;
 import to.lova.spring.blaze.entity.CustomerSummaryRepository;
-import to.lova.spring.blaze.entity.Customer_;
 import to.lova.spring.blaze.entity.HotspotConfiguration;
 import to.lova.spring.blaze.entity.Person;
 import to.lova.spring.blaze.entity.ServiceContractRepository;
@@ -184,7 +184,8 @@ public class SpringBlazeApplicationTests {
             var customer = root.get(ServiceContract_.customer);
             var addresses = root.join(ServiceContract_.addresses,
                     JoinType.LEFT);
-            return this.cb.or(this.cb.equal(customer.get(Customer_.city), city),
+            return this.cb.or(
+                    this.cb.equal(customer.get(AbstractCustomer_.city), city),
                     this.cb.equal(addresses.get(ShippingAddress_.city), city));
         });
     }
