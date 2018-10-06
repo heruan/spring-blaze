@@ -17,6 +17,7 @@ package to.lova.spring.blaze.entity;
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -225,6 +226,34 @@ public class HotspotConfiguration extends Configuration {
             return this.termsFull;
         }
 
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.instruction, this.loginMode,
+                    this.passwordLength, this.passwordType, this.termsFull,
+                    this.termsShort, this.welcome);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof LoginConfiguration)) {
+                return false;
+            }
+            LoginConfiguration other = (LoginConfiguration) obj;
+            return Objects.equals(this.instruction, other.instruction)
+                    && this.loginMode == other.loginMode
+                    && this.passwordLength == other.passwordLength
+                    && this.passwordType == other.passwordType
+                    && Objects.equals(this.termsFull, other.termsFull)
+                    && Objects.equals(this.termsShort, other.termsShort)
+                    && Objects.equals(this.welcome, other.welcome);
+        }
+
     }
 
     @Embeddable
@@ -269,6 +298,31 @@ public class HotspotConfiguration extends Configuration {
         public void setHelpNumber(String helpNumber) {
             this.helpNumber = helpNumber;
         }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.download, this.helpNumber, this.loginPage,
+                    this.ssid);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof PdfConfiguration)) {
+                return false;
+            }
+            PdfConfiguration other = (PdfConfiguration) obj;
+            return this.download == other.download
+                    && Objects.equals(this.helpNumber, other.helpNumber)
+                    && Objects.equals(this.loginPage, other.loginPage)
+                    && Objects.equals(this.ssid, other.ssid);
+        }
+
     }
 
     @Embeddable
@@ -312,6 +366,30 @@ public class HotspotConfiguration extends Configuration {
 
         public void setEnabled(boolean enabled) {
             this.enabled = enabled;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.enabled, this.endpoint, this.password,
+                    this.username);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof TrendooConfiguration)) {
+                return false;
+            }
+            TrendooConfiguration other = (TrendooConfiguration) obj;
+            return this.enabled == other.enabled
+                    && Objects.equals(this.endpoint, other.endpoint)
+                    && Objects.equals(this.password, other.password)
+                    && Objects.equals(this.username, other.username);
         }
 
     }
@@ -358,6 +436,31 @@ public class HotspotConfiguration extends Configuration {
         public void setAddress(String address) {
             this.address = address;
         }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.address, this.email, this.name,
+                    this.phoneNumber);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof PrivacyConfiguration)) {
+                return false;
+            }
+            PrivacyConfiguration other = (PrivacyConfiguration) obj;
+            return Objects.equals(this.address, other.address)
+                    && Objects.equals(this.email, other.email)
+                    && Objects.equals(this.name, other.name)
+                    && Objects.equals(this.phoneNumber, other.phoneNumber);
+        }
+
     }
 
 }

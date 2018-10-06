@@ -8,7 +8,6 @@ import java.util.Locale;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
@@ -24,14 +23,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.blazebit.persistence.view.EntityViewManager;
 
-import to.lova.spring.blaze.entity.AbstractCustomer_;
 import to.lova.spring.blaze.entity.Article;
 import to.lova.spring.blaze.entity.CustomerSummaryRepository;
 import to.lova.spring.blaze.entity.HotspotConfiguration;
 import to.lova.spring.blaze.entity.Person;
+import to.lova.spring.blaze.entity.ServiceContractFilter;
 import to.lova.spring.blaze.entity.ServiceContractRepository;
-import to.lova.spring.blaze.entity.ServiceContract_;
-import to.lova.spring.blaze.entity.ShippingAddress_;
+import to.lova.spring.blaze.entity.UserRepository;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
 import to.lova.spring.blaze.repository.ConfigurationRepository;
@@ -178,16 +176,16 @@ public class SpringBlazeApplicationTests {
     @Test
     public void testCriteriaJoin(
             @Autowired ServiceContractRepository repository) {
-        var city = "foo";
-        repository.findAll((root, query, cb) -> {
-            query.distinct(true);
-            var customer = root.get(ServiceContract_.customer);
-            var addresses = root.join(ServiceContract_.addresses,
-                    JoinType.LEFT);
-            return this.cb.or(
-                    this.cb.equal(customer.get(AbstractCustomer_.city), city),
-                    this.cb.equal(addresses.get(ShippingAddress_.city), city));
-        });
+        var filter = new ServiceContractFilter();
+        filter.setCustomerCity("foo");
+        repository.count(filter);
+        repository.findAll(filter);
+    }
+
+    @Test
+    public void testMapCollectionSubquery(
+            @Autowired UserRepository repository) {
+        repository.findByEmailAddress("foo@bar.baz");
     }
 
 }
