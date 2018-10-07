@@ -24,4 +24,6 @@ public interface UserRepository
         });
     }
 
+    UserDetail findByName(String name);
+
 }

@@ -27,8 +27,10 @@ import to.lova.spring.blaze.entity.Article;
 import to.lova.spring.blaze.entity.CustomerSummaryRepository;
 import to.lova.spring.blaze.entity.HotspotConfiguration;
 import to.lova.spring.blaze.entity.Person;
+import to.lova.spring.blaze.entity.RoleDetail;
 import to.lova.spring.blaze.entity.ServiceContractFilter;
 import to.lova.spring.blaze.entity.ServiceContractRepository;
+import to.lova.spring.blaze.entity.User;
 import to.lova.spring.blaze.entity.UserRepository;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
@@ -186,6 +188,18 @@ public class SpringBlazeApplicationTests {
     public void testMapCollectionSubquery(
             @Autowired UserRepository repository) {
         repository.findByEmailAddress("foo@bar.baz");
+    }
+
+    @Test
+    public void testInverseUpdateableRelation(@Autowired EntityViewManager evm,
+            @Autowired UserRepository userRepository) {
+        var user = new User();
+        user.setName("foo");
+        userRepository.saveAndFlush(user);
+        var userDetail = userRepository.findByName("foo");
+        var role = evm.create(RoleDetail.class);
+        role.getUsers().add(userDetail);
+        evm.update(this.em.getEntityManager(), role);
     }
 
 }
