@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashSet;
 import java.util.Locale;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -200,6 +201,10 @@ public class SpringBlazeApplicationTests {
         var role = evm.create(RoleDetail.class);
         role.getUsers().add(userDetail);
         evm.update(this.em.getEntityManager(), role);
+        this.em.flush();
+        role.getUsers().retainAll(new HashSet<>());
+        evm.update(this.em.getEntityManager(), role);
+        this.em.flush();
     }
 
 }
