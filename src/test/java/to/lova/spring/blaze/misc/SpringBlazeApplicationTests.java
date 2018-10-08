@@ -1,10 +1,9 @@
-package to.lova.spring.blaze;
+package to.lova.spring.blaze.misc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashSet;
 import java.util.Locale;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,24 +14,20 @@ import javax.persistence.criteria.Subquery;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.blazebit.persistence.view.EntityViewManager;
 
+import to.lova.spring.blaze.BlazeConfiguration;
 import to.lova.spring.blaze.entity.Article;
-import to.lova.spring.blaze.entity.CustomerSummaryRepository;
 import to.lova.spring.blaze.entity.HotspotConfiguration;
 import to.lova.spring.blaze.entity.Person;
-import to.lova.spring.blaze.entity.RoleDetail;
-import to.lova.spring.blaze.entity.ServiceContractFilter;
-import to.lova.spring.blaze.entity.ServiceContractRepository;
-import to.lova.spring.blaze.entity.User;
-import to.lova.spring.blaze.entity.UserRepository;
+import to.lova.spring.blaze.misc.model.CustomerSummaryRepository;
+import to.lova.spring.blaze.misc.model.ServiceContractFilter;
+import to.lova.spring.blaze.misc.model.ServiceContractRepository;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
 import to.lova.spring.blaze.repository.ConfigurationRepository;
@@ -42,7 +37,6 @@ import to.lova.spring.blaze.repository.PersonViewRepository;
 import to.lova.spring.blaze.view.PersonView;
 
 @DataJpaTest
-@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BlazeConfiguration.class)
 public class SpringBlazeApplicationTests {
 
@@ -183,28 +177,6 @@ public class SpringBlazeApplicationTests {
         filter.setCustomerCity("foo");
         repository.count(filter);
         repository.findAll(filter);
-    }
-
-    @Test
-    public void testMapCollectionSubquery(
-            @Autowired UserRepository repository) {
-        repository.findByEmailAddress("foo@bar.baz");
-    }
-
-    @Test
-    public void testInverseUpdateableRelation(@Autowired EntityViewManager evm,
-            @Autowired UserRepository userRepository) {
-        var user = new User();
-        user.setName("foo");
-        userRepository.saveAndFlush(user);
-        var userDetail = userRepository.findByName("foo");
-        var role = evm.create(RoleDetail.class);
-        role.getUsers().add(userDetail);
-        evm.update(this.em.getEntityManager(), role);
-        this.em.flush();
-        role.getUsers().retainAll(new HashSet<>());
-        evm.update(this.em.getEntityManager(), role);
-        this.em.flush();
     }
 
 }

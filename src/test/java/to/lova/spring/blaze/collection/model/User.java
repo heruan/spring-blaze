@@ -1,5 +1,6 @@
-package to.lova.spring.blaze.entity;
+package to.lova.spring.blaze.collection.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,7 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyColumn;
 
 @Entity
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,8 +30,19 @@ public class User {
     @ManyToMany
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(mappedBy = "users")
+    private Set<Group> groups = new HashSet<>();
+
     public Long getId() {
         return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Map<String, Boolean> getEmailAddresses() {
@@ -41,12 +53,8 @@ public class User {
         return this.roles;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public Set<Group> getGroups() {
+        return this.groups;
     }
 
 }

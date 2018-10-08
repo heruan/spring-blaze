@@ -1,4 +1,4 @@
-package to.lova.spring.blaze.entity;
+package to.lova.spring.blaze.misc.model;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -26,9 +26,9 @@ import com.blazebit.persistence.view.MappingCorrelatedSimple;
 import com.blazebit.persistence.view.MappingSubquery;
 import com.blazebit.persistence.view.SubqueryProvider;
 
-import to.lova.spring.blaze.entity.AbstractCustomer;
-import to.lova.spring.blaze.entity.ServiceContract;
-import to.lova.spring.blaze.entity.ShippingAddress;
+import to.lova.spring.blaze.misc.model.AbstractCustomer;
+import to.lova.spring.blaze.misc.model.ServiceContract;
+import to.lova.spring.blaze.misc.model.ShippingAddress;
 
 @EntityView(AbstractCustomer.class)
 @EntityViewInheritance

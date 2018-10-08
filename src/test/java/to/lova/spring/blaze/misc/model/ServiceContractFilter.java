@@ -1,4 +1,4 @@
-package to.lova.spring.blaze.entity;
+package to.lova.spring.blaze.misc.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +12,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
+
+import to.lova.spring.blaze.entity.AbstractCustomer_;
+import to.lova.spring.blaze.entity.ServiceContract_;
+import to.lova.spring.blaze.entity.ShippingAddress_;
 
 public class ServiceContractFilter
         implements Serializable, Specification<ServiceContract> {

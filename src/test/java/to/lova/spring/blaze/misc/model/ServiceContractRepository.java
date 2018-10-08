@@ -1,4 +1,4 @@
-package to.lova.spring.blaze.entity;
+package to.lova.spring.blaze.misc.model;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

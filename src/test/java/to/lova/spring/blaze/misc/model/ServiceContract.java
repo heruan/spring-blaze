@@ -1,4 +1,4 @@
-package to.lova.spring.blaze.entity;
+package to.lova.spring.blaze.misc.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

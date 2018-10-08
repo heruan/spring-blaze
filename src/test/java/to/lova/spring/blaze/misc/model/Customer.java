@@ -1,4 +1,4 @@
-package to.lova.spring.blaze.entity;
+package to.lova.spring.blaze.misc.model;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
