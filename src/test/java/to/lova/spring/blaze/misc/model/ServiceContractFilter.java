@@ -13,10 +13,6 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import to.lova.spring.blaze.entity.AbstractCustomer_;
-import to.lova.spring.blaze.entity.ServiceContract_;
-import to.lova.spring.blaze.entity.ShippingAddress_;
-
 public class ServiceContractFilter
         implements Serializable, Specification<ServiceContract> {
 

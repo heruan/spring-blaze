@@ -26,16 +26,14 @@ import com.blazebit.persistence.view.MappingCorrelatedSimple;
 import com.blazebit.persistence.view.MappingSubquery;
 import com.blazebit.persistence.view.SubqueryProvider;
 
-import to.lova.spring.blaze.misc.model.AbstractCustomer;
-import to.lova.spring.blaze.misc.model.ServiceContract;
-import to.lova.spring.blaze.misc.model.ShippingAddress;
+import to.lova.spring.blaze.viewjoin.Ticket;
 
 @EntityView(AbstractCustomer.class)
 @EntityViewInheritance
 public interface AbstractCustomerSummary {
 
     @IdMapping
-    String getId();
+    Long getId();
 
     String getName();
 
@@ -67,6 +65,34 @@ public interface AbstractCustomerSummary {
                         this.getPostalCode(), this.getCity(),
                         this.getProvince(), this.getRegion(), this.getCountry())
                 .filter(Objects::nonNull).collect(Collectors.joining(", "));
+    }
+
+    @MappingCorrelatedSimple(correlated = TicketCountCte.class,
+            correlationBasis = "this",
+            correlationExpression = "customerId = embedding_view(id)",
+            fetch = FetchStrategy.JOIN)
+    TicketAggregateView getTicketAggregates();
+
+    @EntityView(TicketCountCte.class)
+    interface TicketAggregateView {
+
+        String getCustomerId();
+
+        @Mapping("coalesce(totalTicketCount, 0L)")
+        long getTotalTicketCount();
+
+        @Mapping("coalesce(openTicketCount, 0L)")
+        long getOpenTicketCount();
+
+    }
+
+    @CTE
+    @Entity
+    class TicketCountCte {
+        @Id
+        String customerId;
+        long totalTicketCount;
+        long openTicketCount;
     }
 
     @MappingCorrelatedSimple(correlated = ContractCountCte.class,
@@ -111,6 +137,12 @@ public interface AbstractCustomerSummary {
         public <T> T createSubquery(SubqueryInitiator<T> subqueryInitiator) {
             // @formatter:off
             return subqueryInitiator.fromValues(Integer.class, "t", Collections.singletonList(1)).select("1")
+                .with(TicketCountCte.class)
+                    .from(Ticket.class, "t")
+                    .bind("customerId").select("t.customer.id")
+                    .bind("totalTicketCount").select("count(*)")
+                    .bind("openTicketCount").select("count(CASE WHEN t.active = true THEN 1 END)")
+                .end()
                 .with(ContractCountCte.class)
                     .from(ServiceContract.class, "c1")
                     .bind("customerId").select("c1.customer.id")

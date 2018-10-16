@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -16,12 +17,13 @@ import javax.persistence.OneToMany;
 public class AbstractCustomer extends Company {
 
     @Id
-    private String id;
+    @GeneratedValue
+    private Long id;
 
     @OneToMany(mappedBy = "customer")
     private List<ServiceContract> serviceContracts = new ArrayList<>();
 
-    public String getId() {
+    public Long getId() {
         return this.id;
     }
 
