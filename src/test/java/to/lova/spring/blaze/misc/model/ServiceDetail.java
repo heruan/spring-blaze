@@ -7,12 +7,24 @@ import java.util.Objects;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
+
+import to.lova.spring.blaze.collection.model.User;
 
 @Embeddable
 public class ServiceDetail implements Serializable {
 
-    private String serviceHours;
+    @ManyToOne
+    private User technician;
+
+    public User getTechnician() {
+        return this.technician;
+    }
+
+    public void setTechnician(User technician) {
+        this.technician = technician;
+    }
 
     @OrderColumn
     @ElementCollection
@@ -24,7 +36,7 @@ public class ServiceDetail implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.serviceHours, this.switchboardAddresses,
+        return Objects.hash(this.technician, this.switchboardAddresses,
                 this.switchboardInterfaces);
     }
 
@@ -40,7 +52,7 @@ public class ServiceDetail implements Serializable {
             return false;
         }
         ServiceDetail other = (ServiceDetail) obj;
-        return Objects.equals(this.serviceHours, other.serviceHours)
+        return Objects.equals(this.technician, other.technician)
                 && Objects.equals(this.switchboardAddresses,
                         other.switchboardAddresses)
                 && Objects.equals(this.switchboardInterfaces,

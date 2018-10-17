@@ -1,9 +1,12 @@
 package to.lova.spring.blaze.collection.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.ElementCollection;
@@ -13,6 +16,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.OneToMany;
+
+import to.lova.spring.blaze.misc.model.UserSession;
 
 @Entity
 public class User implements Serializable {
@@ -32,6 +38,9 @@ public class User implements Serializable {
 
     @ManyToMany(mappedBy = "users")
     private Set<Group> groups = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<UserSession> sessions = new ArrayList<>();
 
     public Long getId() {
         return this.id;
@@ -55,6 +64,30 @@ public class User implements Serializable {
 
     public Set<Group> getGroups() {
         return this.groups;
+    }
+
+    public List<UserSession> getSessions() {
+        return this.sessions;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof User)) {
+            return false;
+        }
+        User other = (User) obj;
+        return Objects.equals(this.id, other.id);
     }
 
 }
