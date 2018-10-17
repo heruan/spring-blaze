@@ -41,7 +41,7 @@ public class ViewJoinTests {
     @Test
     public void testNestedSubviewWithAggregates(
             @Autowired TicketCommentDetailRepository repository) {
-        var size = repository.findByTicketId(1L);
+        var size = repository.findByTicketId(1L).size();
         assertEquals(0, size);
     }
 

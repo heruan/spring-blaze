@@ -1,10 +1,7 @@
 package to.lova.spring.blaze.misc.model;
 
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
@@ -20,7 +17,6 @@ import com.blazebit.persistence.SubqueryInitiator;
 import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.EntityViewInheritance;
 import com.blazebit.persistence.view.FetchStrategy;
-import com.blazebit.persistence.view.IdMapping;
 import com.blazebit.persistence.view.Mapping;
 import com.blazebit.persistence.view.MappingCorrelatedSimple;
 import com.blazebit.persistence.view.MappingSubquery;
@@ -30,42 +26,7 @@ import to.lova.spring.blaze.viewjoin.Ticket;
 
 @EntityView(AbstractCustomer.class)
 @EntityViewInheritance
-public interface AbstractCustomerSummary {
-
-    @IdMapping
-    Long getId();
-
-    String getName();
-
-    String getEmailAddress();
-
-    String getTelephoneNumber();
-
-    String getFaxNumber();
-
-    String getNumber();
-
-    String getStreet();
-
-    String getDistrict();
-
-    String getPostalCode();
-
-    String getCity();
-
-    String getProvince();
-
-    String getRegion();
-
-    String getCountry();
-
-    default String getFullAddress() {
-        return Stream
-                .of(this.getNumber(), this.getStreet(), this.getDistrict(),
-                        this.getPostalCode(), this.getCity(),
-                        this.getProvince(), this.getRegion(), this.getCountry())
-                .filter(Objects::nonNull).collect(Collectors.joining(", "));
-    }
+public interface AbstractCustomerSummary extends AbstractCustomerBase {
 
     @MappingCorrelatedSimple(correlated = TicketCountCte.class,
             correlationBasis = "this",

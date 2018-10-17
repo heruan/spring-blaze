@@ -6,7 +6,7 @@ import com.blazebit.persistence.view.IdMapping;
 import com.blazebit.persistence.view.UpdatableEntityView;
 
 import to.lova.spring.blaze.collection.model.UserDetail;
-import to.lova.spring.blaze.misc.model.AbstractCustomerSummary;
+import to.lova.spring.blaze.misc.model.AbstractCustomerDetail;
 
 @EntityView(Ticket.class)
 @CreatableEntityView
@@ -16,9 +16,9 @@ public interface TicketDetail {
     @IdMapping
     Long getId();
 
-    AbstractCustomerSummary getCustomer();
+    AbstractCustomerDetail getCustomer();
 
-    void setCustomer(AbstractCustomerSummary customer);
+    void setCustomer(AbstractCustomerDetail customer);
 
     UserDetail getAuthor();
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,12 +24,19 @@ public class AbstractCustomer extends Company {
     @OneToMany(mappedBy = "customer")
     private List<ServiceContract> serviceContracts = new ArrayList<>();
 
+    @Embedded
+    private ServiceDetail serviceDetail = new ServiceDetail();
+
     public Long getId() {
         return this.id;
     }
 
     public List<ServiceContract> getServiceContracts() {
         return this.serviceContracts;
+    }
+
+    public ServiceDetail getServiceDetail() {
+        return this.serviceDetail;
     }
 
 }
