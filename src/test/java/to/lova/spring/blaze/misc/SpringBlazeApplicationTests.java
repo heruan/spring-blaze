@@ -25,6 +25,8 @@ import to.lova.spring.blaze.BlazeConfiguration;
 import to.lova.spring.blaze.entity.Article;
 import to.lova.spring.blaze.entity.HotspotConfiguration;
 import to.lova.spring.blaze.entity.Person;
+import to.lova.spring.blaze.misc.model.CustomerDetail;
+import to.lova.spring.blaze.misc.model.CustomerDetailRepository;
 import to.lova.spring.blaze.misc.model.CustomerSummaryRepository;
 import to.lova.spring.blaze.misc.model.ServiceContractFilter;
 import to.lova.spring.blaze.misc.model.ServiceContractRepository;
@@ -177,6 +179,18 @@ public class SpringBlazeApplicationTests {
         filter.setCustomerCity("foo");
         repository.count(filter);
         repository.findAll(filter);
+    }
+
+    @Test
+    public void testUpdatableNestedView(
+            @Autowired CustomerDetailRepository customerRepository,
+            @Autowired EntityViewManager evm) {
+        var customer = evm.create(CustomerDetail.class);
+        customer = customerRepository.save(customer);
+        customer.getServiceDetail().setActive(true);
+        customer.getServiceDetail().setServiceHours("foo");
+        var detail = customerRepository.save(customer).getServiceDetail();
+        assertTrue(detail.isActive());
     }
 
 }

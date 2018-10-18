@@ -15,6 +15,10 @@ import to.lova.spring.blaze.collection.model.User;
 @Embeddable
 public class ServiceDetail implements Serializable {
 
+    private String serviceHours;
+
+    private boolean active;
+
     @ManyToOne
     private User technician;
 
@@ -34,10 +38,35 @@ public class ServiceDetail implements Serializable {
     @ElementCollection
     private List<SwitchboardInterface> switchboardInterfaces = new ArrayList<>();
 
+    public String getServiceHours() {
+        return this.serviceHours;
+    }
+
+    public void setServiceHours(String serviceHours) {
+        this.serviceHours = serviceHours;
+    }
+
+    public boolean isActive() {
+        return this.active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public List<SwitchboardAddress> getSwitchboardAddresses() {
+        return this.switchboardAddresses;
+    }
+
+    public List<SwitchboardInterface> getSwitchboardInterfaces() {
+        return this.switchboardInterfaces;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(this.technician, this.switchboardAddresses,
-                this.switchboardInterfaces);
+        return Objects.hash(this.active, this.serviceHours,
+                this.switchboardAddresses, this.switchboardInterfaces,
+                this.technician);
     }
 
     @Override
@@ -52,11 +81,13 @@ public class ServiceDetail implements Serializable {
             return false;
         }
         ServiceDetail other = (ServiceDetail) obj;
-        return Objects.equals(this.technician, other.technician)
+        return this.active == other.active
+                && Objects.equals(this.serviceHours, other.serviceHours)
                 && Objects.equals(this.switchboardAddresses,
                         other.switchboardAddresses)
                 && Objects.equals(this.switchboardInterfaces,
-                        other.switchboardInterfaces);
+                        other.switchboardInterfaces)
+                && Objects.equals(this.technician, other.technician);
     }
 
 }

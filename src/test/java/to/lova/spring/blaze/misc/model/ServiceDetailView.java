@@ -13,6 +13,14 @@ import to.lova.spring.blaze.collection.model.UserDetail;
 @UpdatableEntityView
 public interface ServiceDetailView extends Serializable {
 
+    String getServiceHours();
+
+    void setServiceHours(String serviceHours);
+
+    boolean isActive();
+
+    void setActive(boolean active);
+
     /**
      * Gets the technician.
      *

@@ -35,7 +35,7 @@ public class ViewJoinTests {
         var cb = cbf.create(this.em.getEntityManager(), TicketComment.class);
         var setting = EntityViewSetting.create(TicketCommentDetail.class);
         var size = evm.applySetting(setting, cb).getResultList().size();
-        assertEquals(0, size);
+        assertEquals(1, size);
     }
 
     @Test
