@@ -1,6 +1,7 @@
 package to.lova.spring.blaze.viewjoin;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.blazebit.persistence.CriteriaBuilderFactory;
-import com.blazebit.persistence.view.EntityViewManager;
-import com.blazebit.persistence.view.EntityViewSetting;
-
 import to.lova.spring.blaze.BlazeConfiguration;
+import to.lova.spring.blaze.collection.model.User;
 
 @DataJpaTest
 @ContextConfiguration(classes = BlazeConfiguration.class)
@@ -22,27 +20,39 @@ public class ViewJoinTests {
     TestEntityManager em;
 
     @Test
-    public void testNestedSubviewWithAggregates(
-            @Autowired CriteriaBuilderFactory cbf,
-            @Autowired EntityViewManager evm) {
-        var ticket = evm.create(TicketDetail.class);
-        evm.update(this.em.getEntityManager(), ticket);
+    public void testTicketSummary(
+            @Autowired TicketSummaryRepository ticketRepository) {
+        User u1 = new User();
+        u1.setName("Foo");
+        u1 = this.em.persistFlushFind(u1);
+        User u2 = new User();
+        u2.setName("Bar");
+        u2 = this.em.persistFlushFind(u2);
 
-        var comment = evm.create(TicketCommentDetail.class);
-        comment.setTicket(ticket);
-        evm.update(this.em.getEntityManager(), comment);
+        Ticket t1 = new Ticket();
+        t1.author = u1;
+        t1 = this.em.persistFlushFind(t1);
 
-        var cb = cbf.create(this.em.getEntityManager(), TicketComment.class);
-        var setting = EntityViewSetting.create(TicketCommentDetail.class);
-        var size = evm.applySetting(setting, cb).getResultList().size();
-        assertEquals(1, size);
-    }
+        Ticket t2 = new Ticket();
+        t2.author = u2;
+        t2 = this.em.persistFlushFind(t2);
 
-    @Test
-    public void testNestedSubviewWithAggregates(
-            @Autowired TicketCommentDetailRepository repository) {
-        var size = repository.findByTicketId(1L).size();
-        assertEquals(0, size);
+        TicketComment c1 = new TicketComment();
+        c1.ticket = t1;
+        c1.author = u1;
+        this.em.persistAndFlush(c1);
+
+        TicketComment c2 = new TicketComment();
+        c2.ticket = t1;
+        c2.author = u2;
+        this.em.persistAndFlush(c2);
+
+        var list = ticketRepository.findAll();
+        assertEquals(2, list.size());
+
+        var id1 = list.get(0).getId();
+        var id2 = list.get(1).getId();
+        assertFalse(id1.equals(id2));
     }
 
 }

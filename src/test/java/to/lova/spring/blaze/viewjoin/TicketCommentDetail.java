@@ -15,10 +15,6 @@ public interface TicketCommentDetail {
     @IdMapping
     Long getId();
 
-    TicketDetail getTicket();
-
-    void setTicket(TicketDetail ticket);
-
     UserDetail getAuthor();
 
     void setAuthor(UserDetail author);
