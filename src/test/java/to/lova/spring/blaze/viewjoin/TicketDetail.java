@@ -14,7 +14,7 @@ import to.lova.spring.blaze.misc.model.AbstractCustomerDetail;
 public interface TicketDetail {
 
     @IdMapping
-    Long getId();
+    Long getNumber();
 
     AbstractCustomerDetail getCustomer();
 

@@ -3,6 +3,8 @@ package to.lova.spring.blaze.viewjoin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.util.Locale;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -47,11 +49,11 @@ public class ViewJoinTests {
         c2.author = u2;
         this.em.persistAndFlush(c2);
 
-        var list = ticketRepository.findAll();
+        var list = ticketRepository.findAll(u1, Locale.ENGLISH, Locale.ENGLISH);
         assertEquals(2, list.size());
 
-        var id1 = list.get(0).getId();
-        var id2 = list.get(1).getId();
+        var id1 = list.get(0).getNumber();
+        var id2 = list.get(1).getNumber();
         assertFalse(id1.equals(id2));
     }
 

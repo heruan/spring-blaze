@@ -1,6 +1,9 @@
 package to.lova.spring.blaze.viewjoin;
 
+import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -15,11 +18,11 @@ import to.lova.spring.blaze.collection.model.User;
 import to.lova.spring.blaze.misc.model.AbstractCustomer;
 
 @Entity
-public class Ticket {
+public class Ticket implements Serializable {
 
     @Id
     @GeneratedValue
-    Long id;
+    Long number;
 
     String subject;
 
@@ -39,6 +42,13 @@ public class Ticket {
     @OrderBy(TicketComment_.CREATION_INSTANT)
     @OneToMany(mappedBy = "ticket")
     SortedSet<TicketComment> comments = new TreeSet<>();
+
+    @OneToMany(mappedBy = "entity")
+    private Set<TicketSeenByUser> seen = new HashSet<>();
+
+    public Long getNumber() {
+        return this.number;
+    }
 
     public String getSubject() {
         return this.subject;
@@ -84,12 +94,12 @@ public class Ticket {
         return this.creationInstant;
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
     public SortedSet<TicketComment> getComments() {
         return this.comments;
+    }
+
+    public Set<TicketSeenByUser> getSeen() {
+        return this.seen;
     }
 
 }

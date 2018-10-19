@@ -1,16 +1,20 @@
 package to.lova.spring.blaze.viewjoin;
 
+import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import to.lova.spring.blaze.collection.model.User;
 
 @Entity
-public class TicketComment {
+public class TicketComment implements Serializable {
 
     @Id
     @GeneratedValue
@@ -26,6 +30,9 @@ public class TicketComment {
     User assignee;
 
     Instant creationInstant = Instant.now();
+
+    @OneToMany(mappedBy = "entity")
+    private Set<TicketCommentSeenByUser> seen = new HashSet<>();
 
     public Ticket getTicket() {
         return this.ticket;
@@ -57,6 +64,10 @@ public class TicketComment {
 
     public Instant getCreationInstant() {
         return this.creationInstant;
+    }
+
+    public Set<TicketCommentSeenByUser> getSeen() {
+        return this.seen;
     }
 
 }
