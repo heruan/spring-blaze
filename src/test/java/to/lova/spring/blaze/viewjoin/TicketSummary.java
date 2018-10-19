@@ -18,6 +18,7 @@ import com.blazebit.persistence.view.MappingSubquery;
 import com.blazebit.persistence.view.SubqueryProvider;
 
 import to.lova.spring.blaze.collection.model.UserDetail;
+import to.lova.spring.blaze.misc.model.AbstractCustomerSummary;
 
 @EntityView(Ticket.class)
 public interface TicketSummary {
@@ -37,6 +38,8 @@ public interface TicketSummary {
     Set<UserDetail> getCommentAuthors();
 
     String getSubject();
+
+    AbstractCustomerSummary getCustomer();
 
     @MappingSubquery(value = SeenProvider.class, subqueryAlias = "seen",
             expression = "coalesce(seen, false)")
