@@ -57,4 +57,41 @@ public class ViewJoinTests {
         assertFalse(id1.equals(id2));
     }
 
+    @Test
+    public void testTicketSummarySpecification(
+            @Autowired TicketSummaryRepository ticketRepository) {
+        User u = new User();
+        u.setName("Foo");
+        final var user = this.em.persistFlushFind(u);
+        ticketRepository.findAll((root, query, criteriaBuilder) -> {
+            var sq = query.subquery(Boolean.class);
+            var observer = sq.correlate(root).join(Ticket_.seen)
+                    .get(TicketSeenByUser_.observer);
+            var ticketSeen = criteriaBuilder
+                    .exists(sq.where(criteriaBuilder.equal(observer, user)))
+                    .not();
+
+            var commentCountSubquery = query.subquery(Long.class);
+            commentCountSubquery.correlate(root).join(Ticket_.comments);
+            var commentCount = criteriaBuilder.count(commentCountSubquery);
+
+            var seenCommentCountSubquery = query.subquery(Long.class);
+            var commentPath = seenCommentCountSubquery.correlate(root)
+                    .join(Ticket_.comments);
+            var commentObserverPath = commentPath.join(TicketComment_.seen)
+                    .get(TicketCommentSeenByUser_.observer);
+            var seenCommentCount = criteriaBuilder
+                    .count(seenCommentCountSubquery.where(
+                            criteriaBuilder.equal(commentObserverPath, user)));
+
+            var hasUnseenComments = criteriaBuilder.ge(
+                    criteriaBuilder.diff(
+                            commentCountSubquery.select(commentCount),
+                            seenCommentCountSubquery.select(seenCommentCount)),
+                    0);
+
+            return criteriaBuilder.or(ticketSeen, hasUnseenComments);
+        });
+    }
+
 }
