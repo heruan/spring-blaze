@@ -50,8 +50,7 @@ public interface TicketSummary {
         @Override
         public <T> T createSubquery(SubqueryInitiator<T> subqueryInitiator) {
             return subqueryInitiator.from("embedding_view(seen)", "s")
-                    .select("true").where("s.observer")
-                    .eqExpression(":observer").setMaxResults(1).end();
+                    .select("true").where("s").eqExpression(":observer").end();
         }
 
     }
@@ -68,7 +67,7 @@ public interface TicketSummary {
     }
 
     default boolean isHasUnseenComments() {
-        return this.getCommentAggregates().getSeenCommentCount() > 0;
+        return this.getUnseenCommentsCount() > 0;
     }
 
     @EntityView(TicketCommentsCTE.class)
@@ -108,10 +107,8 @@ public interface TicketSummary {
                     .from(TicketComment.class, "c")
                     .bind("ticketNumber").select("c.ticket.number")
                     .bind("totalCommentCount").select("count(*)")
-                    .bind("seenCommentCount").selectSubquery("seenComments", "sum(seenComments)")
-                        .from("c.seen", "s").select("1")
-                        .where("s.observer").eqExpression(":observer")
-                        .end()
+                    .bind("seenCommentCount").select("count(*)")
+                        .where(":observer").isMemberOf("c.seen")
                     .end()
                 .end();
                 // @formatter:on

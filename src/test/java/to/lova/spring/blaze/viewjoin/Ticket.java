@@ -43,8 +43,8 @@ public class Ticket implements Serializable {
     @OneToMany(mappedBy = "ticket")
     SortedSet<TicketComment> comments = new TreeSet<>();
 
-    @OneToMany(mappedBy = "entity")
-    private Set<TicketSeenByUser> seen = new HashSet<>();
+    @OneToMany
+    private Set<User> seen = new HashSet<>();
 
     public Long getNumber() {
         return this.number;
@@ -98,7 +98,7 @@ public class Ticket implements Serializable {
         return this.comments;
     }
 
-    public Set<TicketSeenByUser> getSeen() {
+    public Set<User> getSeen() {
         return this.seen;
     }
 

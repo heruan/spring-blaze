@@ -31,8 +31,8 @@ public class TicketComment implements Serializable {
 
     Instant creationInstant = Instant.now();
 
-    @OneToMany(mappedBy = "entity")
-    private Set<TicketCommentSeenByUser> seen = new HashSet<>();
+    @OneToMany
+    private Set<User> seen = new HashSet<>();
 
     public Ticket getTicket() {
         return this.ticket;
@@ -66,7 +66,7 @@ public class TicketComment implements Serializable {
         return this.creationInstant;
     }
 
-    public Set<TicketCommentSeenByUser> getSeen() {
+    public Set<User> getSeen() {
         return this.seen;
     }
 
