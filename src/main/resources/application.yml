@@ -3,4 +3,4 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
-        implicit_naming_strategy: component-path
+        implicit_naming_strategy: to.lova.spring.blaze.ImplicitNamingStrategyComponentPathJoinTable
