@@ -10,7 +10,7 @@ import com.blazebit.persistence.view.PostCreate;
 import com.blazebit.persistence.view.UpdatableEntityView;
 import com.blazebit.persistence.view.UpdatableMapping;
 
-import to.lova.spring.blaze.entity.LocalizedString;
+import to.lova.spring.blaze.model.LocalizedString;
 
 @EntityView(LocalizedString.class)
 @CreatableEntityView

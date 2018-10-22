@@ -71,15 +71,11 @@
         </dependency>
         <dependency>
             <groupId>com.blazebit</groupId>
-            <artifactId>
-                blaze-persistence-integration-spring-data-2.1
-            </artifactId>
+            <artifactId>blaze-persistence-integration-spring-data-2.1</artifactId>
         </dependency>
         <dependency>
             <groupId>com.blazebit</groupId>
-            <artifactId>
-                blaze-persistence-integration-hibernate-5.3
-            </artifactId>
+            <artifactId>blaze-persistence-integration-hibernate-5.3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -111,11 +107,6 @@
     </build>
 
     <repositories>
-        <repository>
-            <id>forks-releases</id>
-            <name>Axians Forks</name>
-            <url>https://maven.axians.it/repository/forks-releases</url>
-        </repository>
         <repository>
             <id>spring-snapshots</id>
             <name>Spring Snapshots</name>

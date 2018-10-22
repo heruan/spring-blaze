@@ -5,13 +5,13 @@ import com.blazebit.persistence.view.IdMapping;
 import com.blazebit.persistence.view.Mapping;
 import com.blazebit.persistence.view.UpdatableEntityView;
 
-import to.lova.spring.blaze.entity.HotspotConfiguration;
-import to.lova.spring.blaze.entity.HotspotConfiguration.LoginConfiguration;
-import to.lova.spring.blaze.entity.HotspotConfiguration.LoginConfiguration.LoginMode;
-import to.lova.spring.blaze.entity.HotspotConfiguration.LoginConfiguration.PasswordType;
-import to.lova.spring.blaze.entity.HotspotConfiguration.PdfConfiguration;
-import to.lova.spring.blaze.entity.HotspotConfiguration.PrivacyConfiguration;
-import to.lova.spring.blaze.entity.HotspotConfiguration.TrendooConfiguration;
+import to.lova.spring.blaze.model.HotspotConfiguration;
+import to.lova.spring.blaze.model.HotspotConfiguration.LoginConfiguration;
+import to.lova.spring.blaze.model.HotspotConfiguration.PdfConfiguration;
+import to.lova.spring.blaze.model.HotspotConfiguration.PrivacyConfiguration;
+import to.lova.spring.blaze.model.HotspotConfiguration.TrendooConfiguration;
+import to.lova.spring.blaze.model.HotspotConfiguration.LoginConfiguration.LoginMode;
+import to.lova.spring.blaze.model.HotspotConfiguration.LoginConfiguration.PasswordType;
 
 @EntityView(HotspotConfiguration.class)
 @UpdatableEntityView

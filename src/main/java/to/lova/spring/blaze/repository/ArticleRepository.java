@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.blazebit.persistence.spring.data.repository.EntityViewSpecificationExecutor;
 
-import to.lova.spring.blaze.entity.Article;
+import to.lova.spring.blaze.model.Article;
 import to.lova.spring.blaze.view.ArticleView;
 
 public interface ArticleRepository extends JpaRepository<Article, Long>,
