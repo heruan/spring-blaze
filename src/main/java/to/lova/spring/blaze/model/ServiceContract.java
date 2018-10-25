@@ -3,6 +3,7 @@ package to.lova.spring.blaze.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
@@ -69,6 +70,9 @@ public class ServiceContract {
     private LocalDate endingDate;
 
     private LocalDate firstServiceDate;
+
+    @ManyToMany
+    private Set<ServiceItem> serviceItems;
 
     @Lob
     @Type(type = "text")

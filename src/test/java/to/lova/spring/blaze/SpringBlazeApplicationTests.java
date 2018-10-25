@@ -26,6 +26,8 @@ import to.lova.spring.blaze.model.Customer;
 import to.lova.spring.blaze.model.HotspotConfiguration;
 import to.lova.spring.blaze.model.Person;
 import to.lova.spring.blaze.model.ServiceContractFilter;
+import to.lova.spring.blaze.model.ServiceContract_;
+import to.lova.spring.blaze.model.ServiceItem_;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
 import to.lova.spring.blaze.repository.ConfigurationRepository;
@@ -35,6 +37,7 @@ import to.lova.spring.blaze.repository.CustomerSummaryRepository;
 import to.lova.spring.blaze.repository.PersonRepository;
 import to.lova.spring.blaze.repository.PersonViewRepository;
 import to.lova.spring.blaze.repository.ServiceContractRepository;
+import to.lova.spring.blaze.repository.ServiceItemRepository;
 import to.lova.spring.blaze.view.PersonView;
 
 @DataJpaTest
@@ -191,6 +194,18 @@ public class SpringBlazeApplicationTests {
         var detail = customerRepository.findById(id).orElseThrow()
                 .getServiceDetail();
         assertEquals("foo", detail.getServiceHours());
+    }
+
+    @Test
+    public void testManyToManyInverseJoin(
+            @Autowired ServiceItemRepository repository) {
+        repository.findAll((r, q, b) -> {
+            var sq = q.subquery(Boolean.class);
+            var contract = sq.correlate(r).join(ServiceItem_.serviceContracts)
+                    .get(ServiceContract_.id);
+            sq.select(b.literal(true)).where(b.equal(contract, "FOO"));
+            return b.exists(sq);
+        });
     }
 
 }
