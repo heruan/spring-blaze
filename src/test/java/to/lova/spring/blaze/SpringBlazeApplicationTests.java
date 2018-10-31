@@ -28,6 +28,9 @@ import to.lova.spring.blaze.model.Person;
 import to.lova.spring.blaze.model.ServiceContractFilter;
 import to.lova.spring.blaze.model.ServiceContract_;
 import to.lova.spring.blaze.model.ServiceItem_;
+import to.lova.spring.blaze.model.Ticket;
+import to.lova.spring.blaze.model.TicketHistoryItem.Type;
+import to.lova.spring.blaze.model.User;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
 import to.lova.spring.blaze.repository.ConfigurationRepository;
@@ -39,7 +42,10 @@ import to.lova.spring.blaze.repository.PersonViewRepository;
 import to.lova.spring.blaze.repository.ServiceContractRepository;
 import to.lova.spring.blaze.repository.ServiceItemRepository;
 import to.lova.spring.blaze.repository.TicketDetailRepository;
+import to.lova.spring.blaze.repository.UserRepository;
 import to.lova.spring.blaze.view.PersonView;
+import to.lova.spring.blaze.view.TicketCommentDetailUpdatable;
+import to.lova.spring.blaze.view.TicketHistoryDetail;
 
 @DataJpaTest
 @ContextConfiguration(classes = BlazeConfiguration.class)
@@ -211,8 +217,24 @@ public class SpringBlazeApplicationTests {
 
     @Test
     public void testElementCollectionIdAccess(
-            @Autowired TicketDetailRepository repository) {
-        repository.findAll();
+            @Autowired TicketDetailRepository ticketRepository,
+            @Autowired UserRepository userRepository,
+            @Autowired EntityViewManager evm) {
+        var user = new User();
+        user.setName("foo");
+        this.em.persistAndFlush(user);
+        var author = userRepository.findByName(user.getName());
+        var ticketNumber = this.em.persistAndFlush(new Ticket()).getNumber();
+
+        var ticket = ticketRepository.getOne(ticketNumber);
+        var comment = evm.create(TicketCommentDetailUpdatable.class);
+        var historyItem = evm.create(TicketHistoryDetail.class);
+        comment.setAuthor(author);
+        historyItem.setType(Type.COMMENT);
+        historyItem.setAuthor(author);
+        historyItem.setComment(comment);
+        ticket.getHistory().add(historyItem);
+        ticketRepository.save(ticket);
     }
 
 }

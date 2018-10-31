@@ -105,7 +105,7 @@ public interface AbstractCustomerSummary extends AbstractCustomerBase {
                     .from(Ticket.class, "t")
                     .bind("customerId").select("t.customer.id")
                     .bind("totalTicketCount").select("count(*)")
-                    .bind("openTicketCount").select("count(CASE WHEN t.active = true THEN 1 END)")
+                    .bind("openTicketCount").select("count(CASE WHEN t.open = true THEN 1 END)")
                 .end()
                 .with(ContractCountCte.class)
                     .from(ServiceContract.class, "c1")

@@ -36,7 +36,7 @@ public class Ticket implements Serializable {
     @ManyToOne
     User assignee;
 
-    boolean active;
+    boolean open;
 
     Instant creationInstant = Instant.now();
 
@@ -87,12 +87,12 @@ public class Ticket implements Serializable {
         this.assignee = assignee;
     }
 
-    public boolean isActive() {
-        return this.active;
+    public boolean isOpen() {
+        return this.open;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setOpen(boolean active) {
+        this.open = active;
     }
 
     public Instant getCreationInstant() {

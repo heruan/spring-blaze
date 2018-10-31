@@ -2,33 +2,25 @@ package to.lova.spring.blaze.view;
 
 import java.util.List;
 
-import com.blazebit.persistence.view.CreatableEntityView;
 import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
-import com.blazebit.persistence.view.UpdatableEntityView;
 
 import to.lova.spring.blaze.model.Ticket;
 
 @EntityView(Ticket.class)
-@CreatableEntityView
-@UpdatableEntityView
 public interface TicketDetail {
 
     @IdMapping
     Long getNumber();
 
-    AbstractCustomerDetail getCustomer();
+    AbstractCustomerBase getCustomer();
 
-    void setCustomer(AbstractCustomerDetail customer);
+    UserBase getAuthor();
 
-    UserDetail getAuthor();
-
-    void setAuthor(UserDetail author);
-
-    UserDetail getAssignee();
-
-    void setAssignee(UserDetail assignee);
+    UserBase getAssignee();
 
     List<TicketHistoryDetail> getHistory();
+
+    boolean isOpen();
 
 }

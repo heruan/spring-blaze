@@ -17,22 +17,56 @@ package to.lova.spring.blaze.view;
 
 import java.time.Instant;
 
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+import com.blazebit.persistence.CTE;
+import com.blazebit.persistence.view.CreatableEntityView;
 import com.blazebit.persistence.view.EntityView;
+import com.blazebit.persistence.view.UpdatableEntityView;
 
 import to.lova.spring.blaze.model.TicketHistoryItem;
 import to.lova.spring.blaze.model.TicketHistoryItem.Type;
 
 @EntityView(TicketHistoryItem.class)
+@CreatableEntityView
+@UpdatableEntityView
 public interface TicketHistoryDetail {
 
     Type getType();
 
+    void setType(Type type);
+
     Instant getInstant();
 
-    UserDetail getAuthor();
+    void setInstant(Instant instant);
 
-    UserDetail getAssigneeBefore();
+    UserBase getAuthor();
 
-    UserDetail getAssigneeAfter();
+    void setAuthor(UserBase author);
+
+    UserBase getAssigneeBefore();
+
+    void setAssigneeBefore(UserBase assigneeBefore);
+
+    UserBase getAssigneeAfter();
+
+    void setAssigneeAfter(UserBase assigneeAfter);
+
+    TicketCommentDetail getComment();
+
+    void setComment(TicketCommentDetail comment);
+
+    @CTE
+    @Entity
+    class TicketHistoryDetailCTE {
+
+        @Id
+        Long id;
+
+        @Embedded
+        TicketHistoryItem synthetic;
+    }
 
 }
