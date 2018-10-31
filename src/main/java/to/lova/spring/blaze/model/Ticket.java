@@ -2,17 +2,21 @@ package to.lova.spring.blaze.model;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.OrderColumn;
 
 @Entity
 public class Ticket implements Serializable {
@@ -39,6 +43,10 @@ public class Ticket implements Serializable {
     @OrderBy(TicketComment_.CREATION_INSTANT)
     @OneToMany(mappedBy = TicketComment_.TICKET)
     SortedSet<TicketComment> comments = new TreeSet<>();
+
+    @OrderColumn
+    @ElementCollection
+    List<TicketHistoryItem> history = new ArrayList<>();
 
     @OneToMany
     private Set<User> seen = new HashSet<>();

@@ -38,6 +38,7 @@ import to.lova.spring.blaze.repository.PersonRepository;
 import to.lova.spring.blaze.repository.PersonViewRepository;
 import to.lova.spring.blaze.repository.ServiceContractRepository;
 import to.lova.spring.blaze.repository.ServiceItemRepository;
+import to.lova.spring.blaze.repository.TicketDetailRepository;
 import to.lova.spring.blaze.view.PersonView;
 
 @DataJpaTest
@@ -206,6 +207,12 @@ public class SpringBlazeApplicationTests {
             sq.select(b.literal(true)).where(b.equal(contract, "FOO"));
             return b.exists(sq);
         });
+    }
+
+    @Test
+    public void testElementCollectionIdAccess(
+            @Autowired TicketDetailRepository repository) {
+        repository.findAll();
     }
 
 }

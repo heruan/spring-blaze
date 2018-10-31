@@ -1,5 +1,7 @@
 package to.lova.spring.blaze.view;
 
+import java.util.List;
+
 import com.blazebit.persistence.view.CreatableEntityView;
 import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
@@ -26,5 +28,7 @@ public interface TicketDetail {
     UserDetail getAssignee();
 
     void setAssignee(UserDetail assignee);
+
+    List<TicketHistoryDetail> getHistory();
 
 }
