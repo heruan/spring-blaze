@@ -17,61 +17,54 @@ package to.lova.spring.blaze.model;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
-@Embeddable
-public class TicketHistoryItem implements Serializable {
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class TicketHistoryItem
+        implements Comparable<TicketHistoryItem>, Serializable {
 
-    public enum Type {
-        COMMENT, TICKET_REFERENCED, COMMENT_REFERENCED, STATUS_CHANGE, ASSIGNEE_CHANGE;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private Type type;
+    private Instant created;
 
-    private Instant instant;
+    @ManyToOne
+    private Ticket ticket;
 
     @ManyToOne
     private User author;
 
-    @ManyToOne
-    private User assigneeBefore;
-
-    @ManyToOne
-    private User assigneeAfter;
-
-    @OneToOne
-    private TicketComment comment;
-
-    @ManyToOne
-    private Ticket referencedFromTicket;
-
-    @ManyToOne
-    private TicketComment referencedFromComment;
-
-    TicketHistoryItem() {
+    protected TicketHistoryItem() {
     }
 
-    public TicketHistoryItem(Type type) {
-        this.type = type;
+    public Long getId() {
+        return this.id;
     }
 
-    public Type getType() {
-        return this.type;
+    public Instant getCreated() {
+        return this.created;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setCreated(Instant created) {
+        this.created = created;
     }
 
-    public Instant getInstant() {
-        return this.instant;
+    public Ticket getTicket() {
+        return this.ticket;
     }
 
-    public void setInstant(Instant instant) {
-        this.instant = instant;
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 
     public User getAuthor() {
@@ -82,44 +75,29 @@ public class TicketHistoryItem implements Serializable {
         this.author = author;
     }
 
-    public User getAssigneeBefore() {
-        return this.assigneeBefore;
+    @Override
+    public int compareTo(TicketHistoryItem o) {
+        return this.created.compareTo(o.created);
     }
 
-    public void setAssigneeBefore(User assigneeBefore) {
-        this.assigneeBefore = assigneeBefore;
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id);
     }
 
-    public User getAssigneeAfter() {
-        return this.assigneeAfter;
-    }
-
-    public void setAssigneeAfter(User assigneeAfter) {
-        this.assigneeAfter = assigneeAfter;
-    }
-
-    public TicketComment getComment() {
-        return this.comment;
-    }
-
-    public void setComment(TicketComment comment) {
-        this.comment = comment;
-    }
-
-    public Ticket getReferencedFromTicket() {
-        return this.referencedFromTicket;
-    }
-
-    public void setReferencedFromTicket(Ticket referencedFromTicket) {
-        this.referencedFromTicket = referencedFromTicket;
-    }
-
-    public TicketComment getReferencedFromComment() {
-        return this.referencedFromComment;
-    }
-
-    public void setReferencedFromComment(TicketComment referencedFromComment) {
-        this.referencedFromComment = referencedFromComment;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof TicketHistoryItem)) {
+            return false;
+        }
+        TicketHistoryItem other = (TicketHistoryItem) obj;
+        return Objects.equals(this.id, other.id);
     }
 
 }

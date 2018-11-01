@@ -2,14 +2,18 @@ package to.lova.spring.blaze.model;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 
 @Entity
 public class TicketComment implements Serializable {
@@ -31,6 +35,10 @@ public class TicketComment implements Serializable {
 
     @OneToMany
     private Set<User> seen = new HashSet<>();
+
+    @OrderColumn
+    @ElementCollection
+    private List<Attachment> attachments = new ArrayList<>();
 
     public Ticket getTicket() {
         return this.ticket;
@@ -66,6 +74,10 @@ public class TicketComment implements Serializable {
 
     public Set<User> getSeen() {
         return this.seen;
+    }
+
+    public List<Attachment> getAttachments() {
+        return this.attachments;
     }
 
 }

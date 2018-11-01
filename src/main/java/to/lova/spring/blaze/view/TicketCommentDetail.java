@@ -1,5 +1,7 @@
 package to.lova.spring.blaze.view;
 
+import java.util.List;
+
 import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
 
@@ -14,5 +16,7 @@ public interface TicketCommentDetail {
     UserBase getAuthor();
 
     UserBase getAssignee();
+
+    List<AttachmentView> getAttachments();
 
 }
