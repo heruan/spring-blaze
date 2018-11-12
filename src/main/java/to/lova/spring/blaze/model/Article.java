@@ -1,11 +1,8 @@
 package to.lova.spring.blaze.model;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
-import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,8 +15,8 @@ public class Article implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @ElementCollection
-    private Map<Locale, String> title = new HashMap<>();
+    @Embedded
+    private LocalizedString title;
 
     @ManyToOne
     private Person author;
@@ -28,7 +25,7 @@ public class Article implements Serializable {
         return this.id;
     }
 
-    public Map<Locale, String> getTitle() {
+    public LocalizedString getTitle() {
         return this.title;
     }
 

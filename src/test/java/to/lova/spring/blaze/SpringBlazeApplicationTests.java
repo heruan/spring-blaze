@@ -39,6 +39,7 @@ import to.lova.spring.blaze.repository.PersonViewRepository;
 import to.lova.spring.blaze.repository.ServiceContractRepository;
 import to.lova.spring.blaze.repository.ServiceItemRepository;
 import to.lova.spring.blaze.repository.TicketDetailRepository;
+import to.lova.spring.blaze.view.LocalizedStringView;
 import to.lova.spring.blaze.view.PersonView;
 import to.lova.spring.blaze.view.TicketDetailUpdatable;
 
@@ -218,9 +219,18 @@ public class SpringBlazeApplicationTests {
             @Autowired TicketDetailRepository ticketDetailRepository) {
         var ticket = this.evm.create(TicketDetailUpdatable.class);
         ticketDetailRepository.save(ticket);
-        this.em.flush();
-        this.em.clear();
         ticketDetailRepository.getOne(ticket.getNumber());
+    }
+
+    @Test
+    public void testLocalizedStringView(
+            @Autowired ArticleViewRepository articleRepository) {
+        var title = this.evm.create(LocalizedStringView.class);
+        var article = articleRepository.getOne(this.article.getId());
+        title.getLocalizedValues().put(Locale.ENGLISH, "eng");
+        title.getLocalizedValues().put(Locale.ITALIAN, "ita");
+        article.setTitle(title);
+        articleRepository.save(article);
     }
 
 }
