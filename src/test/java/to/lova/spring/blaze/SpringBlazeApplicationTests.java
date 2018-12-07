@@ -17,13 +17,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.blazebit.persistence.view.EntityViewManager;
 
 import to.lova.spring.blaze.model.Article;
+import to.lova.spring.blaze.model.Article_;
 import to.lova.spring.blaze.model.Customer;
 import to.lova.spring.blaze.model.HotspotConfiguration;
+import to.lova.spring.blaze.model.LocalizedString_;
 import to.lova.spring.blaze.model.Person;
 import to.lova.spring.blaze.model.ServiceContractFilter;
 import to.lova.spring.blaze.model.ServiceContract_;
@@ -66,6 +69,14 @@ public class SpringBlazeApplicationTests {
 
         var a1 = new Article();
         a1.setAuthor(p1);
+        var title = a1.getTitle().getLocalizedValues();
+        title.put(Locale.ENGLISH, "English");
+        title.put(Locale.ITALIAN, "Italiano");
+        title.put(Locale.GERMAN, "Deutsch");
+        var content = a1.getTitle().getLocalizedValues();
+        content.put(Locale.ENGLISH, "English");
+        content.put(Locale.ITALIAN, "Italiano");
+        content.put(Locale.GERMAN, "Deutsch");
         this.article = this.em.persist(a1);
 
         this.em.flush();
@@ -231,6 +242,34 @@ public class SpringBlazeApplicationTests {
         title.getLocalizedValues().put(Locale.ITALIAN, "ita");
         article.setTitle(title);
         articleRepository.save(article);
+    }
+
+    @Test
+    public void testArticleLocalizedWithJoin(
+            @Autowired ArticleRepository repository) {
+        Specification<Article> specification = (root, query, builder) -> {
+            var path = root.join(Article_.title)
+                    .join(LocalizedString_.localizedValues);
+            return builder.like(builder.upper(path), "%I%");
+        };
+        var count = repository
+                .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
+        assertEquals(1, count);
+    }
+
+    @Test
+    public void testArticleLocalizedWithSubquery(
+            @Autowired ArticleRepository repository) {
+        Specification<Article> specification = (root, query, builder) -> {
+            var subquery = query.subquery(Boolean.class);
+            var path = subquery.correlate(root).join(Article_.title)
+                    .join(LocalizedString_.localizedValues);
+            var predicate = builder.like(builder.upper(path), "%I%");
+            return builder.exists(subquery.where(predicate));
+        };
+        var count = repository
+                .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
+        assertEquals(1, count);
     }
 
 }

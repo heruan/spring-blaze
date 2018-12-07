@@ -16,7 +16,10 @@ public class Article implements Serializable {
     private Long id;
 
     @Embedded
-    private LocalizedString title;
+    private LocalizedString title = new LocalizedString();
+
+    @Embedded
+    private LocalizedString content = new LocalizedString();
 
     @ManyToOne
     private Person author;
@@ -27,6 +30,10 @@ public class Article implements Serializable {
 
     public LocalizedString getTitle() {
         return this.title;
+    }
+
+    public LocalizedString getContent() {
+        return this.content;
     }
 
     public Person getAuthor() {

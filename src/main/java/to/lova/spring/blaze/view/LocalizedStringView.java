@@ -16,6 +16,6 @@ import to.lova.spring.blaze.model.LocalizedString;
 public interface LocalizedStringView {
 
     @UpdatableMapping
-    public abstract Map<Locale, String> getLocalizedValues();
+    Map<Locale, String> getLocalizedValues();
 
 }
