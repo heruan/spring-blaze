@@ -9,14 +9,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 
 import to.lova.spring.blaze.model.Ticket;
 import to.lova.spring.blaze.model.TicketComment;
 import to.lova.spring.blaze.model.TicketComment_;
+import to.lova.spring.blaze.model.TicketFilter;
 import to.lova.spring.blaze.model.Ticket_;
 import to.lova.spring.blaze.model.User;
 import to.lova.spring.blaze.repository.TicketSummaryRepository;
+import to.lova.spring.blaze.repository.UserRepository;
 
 @DataJpaTest
 @ContextConfiguration(classes = BlazeConfiguration.class)
@@ -37,6 +40,7 @@ public class ViewJoinTests {
 
         Ticket t1 = new Ticket();
         t1.setAuthor(u1);
+        t1.setOpen(true);
         t1 = this.em.persistFlushFind(t1);
 
         Ticket t2 = new Ticket();
@@ -87,6 +91,55 @@ public class ViewJoinTests {
 
             return criteriaBuilder.or(ticketSeen, hasUnseenComments);
         }, user);
+    }
+
+    @Test
+    public void testTicketSummaryCorrelations(
+            @Autowired UserRepository userRepository,
+            @Autowired TicketSummaryRepository ticketRepository) {
+        User u1 = new User();
+        u1.setName("Foo");
+        u1 = this.em.persistFlushFind(u1);
+        User u2 = new User();
+        u2.setName("Bar");
+        u2 = this.em.persistFlushFind(u2);
+
+        Ticket t1 = new Ticket();
+        t1.setAuthor(u1);
+        t1.setOpen(true);
+        t1 = this.em.persistFlushFind(t1);
+        this.addComments(t1, 7);
+
+        Ticket t2 = new Ticket();
+        t2.setAuthor(u2);
+        t2 = this.em.persistFlushFind(t2);
+        this.addComments(t2, 2);
+
+        Ticket t3 = new Ticket();
+        t3.setAuthor(u2);
+        t3 = this.em.persistFlushFind(t3);
+        this.addComments(t3, 2);
+
+        Ticket t4 = new Ticket();
+        t4.setAuthor(u2);
+        t4 = this.em.persistFlushFind(t4);
+        this.addComments(t4, 3);
+
+        var filter = new TicketFilter();
+        filter.setOnlyActive(true);
+        var size = ticketRepository.findAll(filter, u1).size();
+        assertEquals(1, size);
+        size = ticketRepository
+                .findAll(new TicketFilter(), u1, PageRequest.of(0, 3)).size();
+        assertEquals(4, size);
+    }
+
+    private void addComments(Ticket ticket, int numberOfComments) {
+        for (int i = 0; i < numberOfComments; i++) {
+            TicketComment c = new TicketComment();
+            c.setTicket(ticket);
+            this.em.persistAndFlush(c);
+        }
     }
 
 }

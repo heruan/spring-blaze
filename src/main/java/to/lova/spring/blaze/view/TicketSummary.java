@@ -35,25 +35,13 @@ public interface TicketSummary {
     long getCommentCount();
 
     @Mapping(value = "comments.author", fetch = FetchStrategy.SUBSELECT)
-    Set<UserDetail> getCommentAuthors();
+    Set<UserBase> getCommentAuthors();
 
-    String getSubject();
-
-    AbstractCustomerSummary getCustomer();
+    AbstractCustomerBase getCustomer();
 
     @MappingSubquery(value = SeenProvider.class, subqueryAlias = "seen",
             expression = "coalesce(seen, false)")
     boolean isSeen();
-
-    class SeenProvider implements SubqueryProvider {
-
-        @Override
-        public <T> T createSubquery(SubqueryInitiator<T> subqueryInitiator) {
-            return subqueryInitiator.from("embedding_view(seen)", "s")
-                    .select("true").where("s").eqExpression(":observer").end();
-        }
-
-    }
 
     @MappingCorrelatedSimple(correlated = TicketCommentsCTE.class,
             correlationBasis = "this",
@@ -73,7 +61,7 @@ public interface TicketSummary {
     @EntityView(TicketCommentsCTE.class)
     interface TicketCommentAggregate {
 
-        Long getTicketNumber();
+        String getTicketNumber();
 
         @Mapping("coalesce(totalCommentCount, 0L)")
         long getTotalCommentCount();
@@ -87,7 +75,7 @@ public interface TicketSummary {
     @Entity
     class TicketCommentsCTE {
         @Id
-        Long ticketNumber;
+        String ticketNumber;
         long totalCommentCount;
         long seenCommentCount;
     }
@@ -111,7 +99,17 @@ public interface TicketSummary {
                         .where(":observer").isMemberOf("c.seen")
                     .end()
                 .end();
-                // @formatter:on
+            // @formatter:on
+        }
+
+    }
+
+    class SeenProvider implements SubqueryProvider {
+
+        @Override
+        public <T> T createSubquery(SubqueryInitiator<T> subqueryInitiator) {
+            return subqueryInitiator.from("embedding_view(seen)", "s")
+                    .select("true").where("s").eqExpression(":observer").end();
         }
 
     }
