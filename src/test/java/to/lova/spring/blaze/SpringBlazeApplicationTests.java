@@ -31,6 +31,8 @@ import to.lova.spring.blaze.model.Person;
 import to.lova.spring.blaze.model.ServiceContractFilter;
 import to.lova.spring.blaze.model.ServiceContract_;
 import to.lova.spring.blaze.model.ServiceItem_;
+import to.lova.spring.blaze.model.TicketStatus;
+import to.lova.spring.blaze.model.TicketStatus_;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
 import to.lova.spring.blaze.repository.ConfigurationRepository;
@@ -44,6 +46,7 @@ import to.lova.spring.blaze.repository.ServiceItemRepository;
 import to.lova.spring.blaze.repository.TicketDetailRepository;
 import to.lova.spring.blaze.view.LocalizedStringView;
 import to.lova.spring.blaze.view.PersonView;
+import to.lova.spring.blaze.view.StatusDetailRepository;
 import to.lova.spring.blaze.view.TicketDetailUpdatable;
 
 @DataJpaTest
@@ -270,6 +273,26 @@ public class SpringBlazeApplicationTests {
         var count = repository
                 .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
         assertEquals(1, count);
+    }
+
+    @Test
+    public void testStatusWithNextView(
+            @Autowired StatusDetailRepository repository) {
+        var s1 = this.em.persist(new TicketStatus("foo"));
+        var s2 = this.em.persist(new TicketStatus("bar"));
+        var s3 = this.em.persist(new TicketStatus("baz"));
+        s3.getNext().add(s1);
+        s3.getNext().add(s2);
+        this.em.persistAndFlush(s3);
+
+        repository.findAll((r, q, b) -> {
+            var sq = q.subquery(TicketStatus.class);
+            var sqRoot = sq.from(TicketStatus.class);
+            var next = sqRoot.join(TicketStatus_.next);
+            sq.select(next)
+                    .where(b.equal(sqRoot.get(TicketStatus_.id), s3.getId()));
+            return r.in(sq);
+        });
     }
 
 }

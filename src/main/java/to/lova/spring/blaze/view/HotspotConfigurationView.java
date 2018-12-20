@@ -7,11 +7,11 @@ import com.blazebit.persistence.view.UpdatableEntityView;
 
 import to.lova.spring.blaze.model.HotspotConfiguration;
 import to.lova.spring.blaze.model.HotspotConfiguration.LoginConfiguration;
+import to.lova.spring.blaze.model.HotspotConfiguration.LoginConfiguration.LoginMode;
+import to.lova.spring.blaze.model.HotspotConfiguration.LoginConfiguration.PasswordType;
 import to.lova.spring.blaze.model.HotspotConfiguration.PdfConfiguration;
 import to.lova.spring.blaze.model.HotspotConfiguration.PrivacyConfiguration;
 import to.lova.spring.blaze.model.HotspotConfiguration.TrendooConfiguration;
-import to.lova.spring.blaze.model.HotspotConfiguration.LoginConfiguration.LoginMode;
-import to.lova.spring.blaze.model.HotspotConfiguration.LoginConfiguration.PasswordType;
 
 @EntityView(HotspotConfiguration.class)
 @UpdatableEntityView

@@ -125,13 +125,9 @@ public class ViewJoinTests {
         t4 = this.em.persistFlushFind(t4);
         this.addComments(t4, 3);
 
-        var filter = new TicketFilter();
-        filter.setOnlyActive(true);
-        var size = ticketRepository.findAll(filter, u1).size();
-        assertEquals(1, size);
-        size = ticketRepository
+        var size = ticketRepository
                 .findAll(new TicketFilter(), u1, PageRequest.of(0, 3)).size();
-        assertEquals(4, size);
+        assertEquals(3, size);
     }
 
     private void addComments(Ticket ticket, int numberOfComments) {
