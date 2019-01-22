@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Version;
 
 @Entity
 public class Ticket implements Serializable {
@@ -20,6 +21,9 @@ public class Ticket implements Serializable {
     @Id
     @GeneratedValue
     Long number;
+
+    @Version
+    Long version;
 
     String subject;
 

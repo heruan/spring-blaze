@@ -295,4 +295,12 @@ public class SpringBlazeApplicationTests {
         });
     }
 
+    @Test
+    public void testOptimisticLocking(
+            @Autowired ArticleViewRepository repository) {
+        var view = repository.findById(this.article.getId()).get();
+        view.setSlug("foo");
+        repository.save(view);
+    }
+
 }

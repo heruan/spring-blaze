@@ -23,4 +23,8 @@ public interface ArticleView {
 
     void setTitle(LocalizedStringView title);
 
+    String getSlug();
+
+    void setSlug(String slug);
+
 }

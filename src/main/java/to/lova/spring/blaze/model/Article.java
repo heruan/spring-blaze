@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 
 @Entity
 public class Article implements Serializable {
@@ -14,6 +15,11 @@ public class Article implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Version
+    private Long version;
+
+    private String slug;
 
     @Embedded
     private LocalizedString title = new LocalizedString();
