@@ -46,7 +46,9 @@ import to.lova.spring.blaze.repository.ServiceItemRepository;
 import to.lova.spring.blaze.repository.TicketDetailRepository;
 import to.lova.spring.blaze.view.LocalizedStringView;
 import to.lova.spring.blaze.view.PersonView;
+import to.lova.spring.blaze.view.StatusDetail;
 import to.lova.spring.blaze.view.StatusDetailRepository;
+import to.lova.spring.blaze.view.StatusItem;
 import to.lova.spring.blaze.view.TicketDetailUpdatable;
 
 @DataJpaTest
@@ -293,6 +295,21 @@ public class SpringBlazeApplicationTests {
                     .where(b.equal(sqRoot.get(TicketStatus_.id), s3.getId()));
             return r.in(sq);
         });
+    }
+
+    @Test
+    public void testAddStatusSubtype(
+            @Autowired StatusDetailRepository repository) {
+        var s1 = this.em.persist(new TicketStatus("foo"));
+        var s2 = this.em.persist(new TicketStatus("bar"));
+        var s1Id = this.em.persistAndGetId(s1);
+        var s2Id = this.em.persistAndGetId(s2);
+
+        var entityManager = this.em.getEntityManager();
+
+        var detail = this.evm.find(entityManager, StatusDetail.class, s1Id);
+        var item = this.evm.find(entityManager, StatusItem.class, s2Id);
+        detail.getNext().add(item);
     }
 
     @Test
