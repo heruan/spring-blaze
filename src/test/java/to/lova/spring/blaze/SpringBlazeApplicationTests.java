@@ -33,6 +33,7 @@ import to.lova.spring.blaze.model.ServiceContract_;
 import to.lova.spring.blaze.model.ServiceItem_;
 import to.lova.spring.blaze.model.TicketStatus;
 import to.lova.spring.blaze.model.TicketStatus_;
+import to.lova.spring.blaze.model.wiki.ArticleDetail;
 import to.lova.spring.blaze.repository.ArticleRepository;
 import to.lova.spring.blaze.repository.ArticleViewRepository;
 import to.lova.spring.blaze.repository.ConfigurationRepository;
@@ -95,6 +96,15 @@ public class SpringBlazeApplicationTests {
     }
 
     @Test
+    public void testFindByAuthorView(
+            @Autowired ArticleViewRepository repository,
+            @Autowired PersonViewRepository personRepository) {
+        var author = personRepository.getOne(this.article.getAuthor().getId());
+        var articles = repository.findByAuthor(author);
+        assertEquals(1, articles.size());
+    }
+
+    @Test
     public void testRepositorySave(@Autowired ArticleRepository repository) {
         var a1 = new Article();
         repository.save(a1);
@@ -122,7 +132,7 @@ public class SpringBlazeApplicationTests {
         personRepository.save(person);
 
         var name = personRepository.findById(person.getId()).orElseThrow()
-                .getName();
+            .getName();
         assertEquals("Foo", name);
     }
 
@@ -134,7 +144,7 @@ public class SpringBlazeApplicationTests {
         repository.saveAndFlush(view);
 
         var name = repository.findById(this.article.getId()).orElseThrow()
-                .getAuthor().getName();
+            .getAuthor().getName();
         assertEquals("Foo", name);
     }
 
@@ -166,7 +176,7 @@ public class SpringBlazeApplicationTests {
     @Test
     public void testFindOne(@Autowired ArticleRepository repository) {
         var view = repository.findOne((root, query, builder) -> builder
-                .equal(root.get("id"), this.article.getId()));
+            .equal(root.get("id"), this.article.getId()));
         assertNotNull(view);
     }
 
@@ -176,18 +186,18 @@ public class SpringBlazeApplicationTests {
             @Autowired ConfigurationViewRepository viewRepository) {
         var c = repository.save(new HotspotConfiguration());
         var v = repository.findOne((root, query, builder) -> builder
-                .equal(root.get("id"), c.getId()));
+            .equal(root.get("id"), c.getId()));
         this.em.flush();
         this.em.clear();
         v.getLoginConfiguration().getWelcomeMessage().getLocalizedValues()
-                .put(Locale.ENGLISH, "foo");
+            .put(Locale.ENGLISH, "foo");
         v.getLoginConfiguration().getWelcomeMessage().getLocalizedValues()
-                .put(Locale.ITALIAN, "foo");
+            .put(Locale.ITALIAN, "foo");
         viewRepository.save(v);
         this.em.flush();
         this.em.clear();
         repository.findOne((root, query, builder) -> builder
-                .equal(root.get("id"), c.getId()));
+            .equal(root.get("id"), c.getId()));
     }
 
     @Test
@@ -214,7 +224,7 @@ public class SpringBlazeApplicationTests {
         customer.getServiceDetail().setServiceHours("foo");
         customerRepository.saveAndFlush(customer);
         var detail = customerRepository.findById(id).orElseThrow()
-                .getServiceDetail();
+            .getServiceDetail();
         assertEquals("foo", detail.getServiceHours());
     }
 
@@ -224,7 +234,7 @@ public class SpringBlazeApplicationTests {
         repository.findAll((r, q, b) -> {
             var sq = q.subquery(Boolean.class);
             var contract = sq.correlate(r).join(ServiceItem_.serviceContracts)
-                    .get(ServiceContract_.id);
+                .get(ServiceContract_.id);
             sq.select(b.literal(true)).where(b.equal(contract, "FOO"));
             return b.exists(sq);
         });
@@ -254,11 +264,11 @@ public class SpringBlazeApplicationTests {
             @Autowired ArticleRepository repository) {
         Specification<Article> specification = (root, query, builder) -> {
             var path = root.join(Article_.title)
-                    .join(LocalizedString_.localizedValues);
+                .join(LocalizedString_.localizedValues);
             return builder.like(builder.upper(path), "%I%");
         };
         var count = repository
-                .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
+            .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
         assertEquals(1, count);
     }
 
@@ -268,12 +278,12 @@ public class SpringBlazeApplicationTests {
         Specification<Article> specification = (root, query, builder) -> {
             var subquery = query.subquery(Boolean.class);
             var path = subquery.correlate(root).join(Article_.title)
-                    .join(LocalizedString_.localizedValues);
+                .join(LocalizedString_.localizedValues);
             var predicate = builder.like(builder.upper(path), "%I%");
             return builder.exists(subquery.where(predicate));
         };
         var count = repository
-                .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
+            .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
         assertEquals(1, count);
     }
 
@@ -292,7 +302,7 @@ public class SpringBlazeApplicationTests {
             var sqRoot = sq.from(TicketStatus.class);
             var next = sqRoot.join(TicketStatus_.next);
             sq.select(next)
-                    .where(b.equal(sqRoot.get(TicketStatus_.id), s3.getId()));
+                .where(b.equal(sqRoot.get(TicketStatus_.id), s3.getId()));
             return r.in(sq);
         });
     }
@@ -318,6 +328,13 @@ public class SpringBlazeApplicationTests {
         var view = repository.findById(this.article.getId()).get();
         view.setSlug("foo");
         repository.save(view);
+    }
+
+    @Test
+    public void testWikiArticleView() {
+        var view = this.evm.create(ArticleDetail.class);
+        view.setSlug("foo");
+        this.evm.update(this.em.getEntityManager(), view);
     }
 
 }
