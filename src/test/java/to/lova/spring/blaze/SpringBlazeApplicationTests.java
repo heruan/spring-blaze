@@ -22,35 +22,34 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.blazebit.persistence.view.EntityViewManager;
 
-import to.lova.spring.blaze.model.Article;
-import to.lova.spring.blaze.model.Article_;
-import to.lova.spring.blaze.model.Customer;
-import to.lova.spring.blaze.model.HotspotConfiguration;
-import to.lova.spring.blaze.model.LocalizedString_;
-import to.lova.spring.blaze.model.Person;
-import to.lova.spring.blaze.model.ServiceContractFilter;
-import to.lova.spring.blaze.model.ServiceContract_;
-import to.lova.spring.blaze.model.ServiceItem_;
-import to.lova.spring.blaze.model.TicketStatus;
-import to.lova.spring.blaze.model.TicketStatus_;
-import to.lova.spring.blaze.model.wiki.ArticleDetail;
-import to.lova.spring.blaze.repository.ArticleRepository;
-import to.lova.spring.blaze.repository.ArticleViewRepository;
-import to.lova.spring.blaze.repository.ConfigurationRepository;
-import to.lova.spring.blaze.repository.ConfigurationViewRepository;
-import to.lova.spring.blaze.repository.CustomerDetailRepository;
-import to.lova.spring.blaze.repository.CustomerSummaryRepository;
-import to.lova.spring.blaze.repository.PersonRepository;
-import to.lova.spring.blaze.repository.PersonViewRepository;
-import to.lova.spring.blaze.repository.ServiceContractRepository;
-import to.lova.spring.blaze.repository.ServiceItemRepository;
-import to.lova.spring.blaze.repository.TicketDetailRepository;
-import to.lova.spring.blaze.view.LocalizedStringView;
-import to.lova.spring.blaze.view.PersonView;
-import to.lova.spring.blaze.view.StatusDetail;
-import to.lova.spring.blaze.view.StatusDetailRepository;
-import to.lova.spring.blaze.view.StatusItem;
-import to.lova.spring.blaze.view.TicketDetailUpdatable;
+import to.lova.spring.blaze.model.article.entity.Article;
+import to.lova.spring.blaze.model.article.entity.Article_;
+import to.lova.spring.blaze.model.article.entity.LocalizedString_;
+import to.lova.spring.blaze.model.article.repository.ArticleRepository;
+import to.lova.spring.blaze.model.article.repository.ArticleViewRepository;
+import to.lova.spring.blaze.model.article.view.LocalizedStringView;
+import to.lova.spring.blaze.model.article.view.PersonView;
+import to.lova.spring.blaze.model.common.entity.Person;
+import to.lova.spring.blaze.model.common.repository.PersonRepository;
+import to.lova.spring.blaze.model.common.repository.PersonViewRepository;
+import to.lova.spring.blaze.model.customer.entity.Customer;
+import to.lova.spring.blaze.model.customer.entity.ServiceContractFilter;
+import to.lova.spring.blaze.model.customer.entity.ServiceContract_;
+import to.lova.spring.blaze.model.customer.entity.ServiceItem_;
+import to.lova.spring.blaze.model.customer.repository.CustomerDetailRepository;
+import to.lova.spring.blaze.model.customer.repository.CustomerSummaryRepository;
+import to.lova.spring.blaze.model.customer.repository.ServiceContractRepository;
+import to.lova.spring.blaze.model.customer.repository.ServiceItemRepository;
+import to.lova.spring.blaze.model.hotspot.entity.HotspotConfiguration;
+import to.lova.spring.blaze.model.hotspot.repository.ConfigurationRepository;
+import to.lova.spring.blaze.model.hotspot.repository.ConfigurationViewRepository;
+import to.lova.spring.blaze.model.ticket.entity.TicketStatus;
+import to.lova.spring.blaze.model.ticket.entity.TicketStatus_;
+import to.lova.spring.blaze.model.ticket.repository.TicketDetailRepository;
+import to.lova.spring.blaze.model.ticket.view.StatusDetail;
+import to.lova.spring.blaze.model.ticket.view.StatusDetailRepository;
+import to.lova.spring.blaze.model.ticket.view.StatusItem;
+import to.lova.spring.blaze.model.ticket.view.TicketDetailUpdatable;
 
 @DataJpaTest
 @ContextConfiguration(classes = BlazeConfiguration.class)
@@ -328,13 +327,6 @@ public class SpringBlazeApplicationTests {
         var view = repository.findById(this.article.getId()).get();
         view.setSlug("foo");
         repository.save(view);
-    }
-
-    @Test
-    public void testWikiArticleView() {
-        var view = this.evm.create(ArticleDetail.class);
-        view.setSlug("foo");
-        this.evm.update(this.em.getEntityManager(), view);
     }
 
 }

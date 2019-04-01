@@ -12,14 +12,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 
-import to.lova.spring.blaze.model.Ticket;
-import to.lova.spring.blaze.model.TicketComment;
-import to.lova.spring.blaze.model.TicketComment_;
-import to.lova.spring.blaze.model.TicketFilter;
-import to.lova.spring.blaze.model.Ticket_;
-import to.lova.spring.blaze.model.User;
-import to.lova.spring.blaze.repository.TicketSummaryRepository;
-import to.lova.spring.blaze.repository.UserRepository;
+import to.lova.spring.blaze.model.common.entity.User;
+import to.lova.spring.blaze.model.common.repository.UserRepository;
+import to.lova.spring.blaze.model.ticket.entity.Ticket;
+import to.lova.spring.blaze.model.ticket.entity.TicketComment;
+import to.lova.spring.blaze.model.ticket.entity.TicketComment_;
+import to.lova.spring.blaze.model.ticket.entity.TicketFilter;
+import to.lova.spring.blaze.model.ticket.entity.Ticket_;
+import to.lova.spring.blaze.model.ticket.repository.TicketSummaryRepository;
 
 @DataJpaTest
 @ContextConfiguration(classes = BlazeConfiguration.class)
@@ -80,14 +80,14 @@ public class ViewJoinTests {
 
             var seenCommentCountSubquery = query.subquery(Long.class);
             var commentPath = seenCommentCountSubquery.correlate(root)
-                    .join(Ticket_.comments);
+                .join(Ticket_.comments);
             var seenCommentCount = criteriaBuilder.count(commentPath);
             seenCommentCountSubquery.select(seenCommentCount)
-                    .where(criteriaBuilder.isMember(user,
-                            commentPath.get(TicketComment_.seen)));
+                .where(criteriaBuilder.isMember(user,
+                        commentPath.get(TicketComment_.seen)));
 
             var hasUnseenComments = criteriaBuilder.ge(criteriaBuilder
-                    .diff(commentCount, seenCommentCountSubquery), 0);
+                .diff(commentCount, seenCommentCountSubquery), 0);
 
             return criteriaBuilder.or(ticketSeen, hasUnseenComments);
         }, user);
@@ -126,7 +126,7 @@ public class ViewJoinTests {
         this.addComments(t4, 3);
 
         var size = ticketRepository
-                .findAll(new TicketFilter(), u1, PageRequest.of(0, 3)).size();
+            .findAll(new TicketFilter(), u1, PageRequest.of(0, 3)).size();
         assertEquals(3, size);
     }
 

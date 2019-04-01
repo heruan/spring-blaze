@@ -13,12 +13,12 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.blazebit.persistence.view.EntityViewManager;
 
-import to.lova.spring.blaze.model.User;
-import to.lova.spring.blaze.repository.GroupRepository;
-import to.lova.spring.blaze.repository.RoleRepository;
-import to.lova.spring.blaze.repository.UserRepository;
-import to.lova.spring.blaze.view.GroupDetail;
-import to.lova.spring.blaze.view.RoleDetail;
+import to.lova.spring.blaze.model.common.entity.User;
+import to.lova.spring.blaze.model.common.repository.GroupRepository;
+import to.lova.spring.blaze.model.common.repository.RoleRepository;
+import to.lova.spring.blaze.model.common.repository.UserRepository;
+import to.lova.spring.blaze.model.common.view.GroupDetail;
+import to.lova.spring.blaze.model.common.view.RoleDetail;
 
 @DataJpaTest
 @ContextConfiguration(classes = BlazeConfiguration.class)
@@ -64,7 +64,7 @@ public class UpdatableCollectionTests {
         em.clear();
 
         var size = groupRepository.findById(group.getId()).get().getUsers()
-                .size();
+            .size();
         assertEquals(1, size);
 
         group = evm.find(em, GroupDetail.class, group.getId());
@@ -91,7 +91,7 @@ public class UpdatableCollectionTests {
         em.clear();
 
         var size = groupRepository.findById(group.getId()).get().getUsers()
-                .size();
+            .size();
         assertEquals(2, size);
 
         group = evm.find(em, GroupDetail.class, group.getId());
@@ -117,7 +117,7 @@ public class UpdatableCollectionTests {
         em.clear();
 
         var size = roleRepository.findById(role.getId()).get().getUsers()
-                .size();
+            .size();
         assertEquals(1, size);
 
         role = evm.find(em, RoleDetail.class, role.getId());
@@ -144,7 +144,7 @@ public class UpdatableCollectionTests {
         em.clear();
 
         var size = roleRepository.findById(role.getId()).get().getUsers()
-                .size();
+            .size();
         assertEquals(2, size);
 
         role = evm.find(em, RoleDetail.class, role.getId());

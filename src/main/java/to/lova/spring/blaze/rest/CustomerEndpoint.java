@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.blazebit.persistence.view.EntityViewManager;
 
-import to.lova.spring.blaze.repository.CustomerDetailRepository;
-import to.lova.spring.blaze.view.AbstractCustomerDetail;
-import to.lova.spring.blaze.view.CustomerDetail;
+import to.lova.spring.blaze.model.customer.repository.CustomerDetailRepository;
+import to.lova.spring.blaze.model.customer.view.AbstractCustomerDetail;
+import to.lova.spring.blaze.model.customer.view.CustomerDetail;
 
 @RestController
 @RequestMapping("/customers")
