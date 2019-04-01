@@ -2,6 +2,7 @@ package to.lova.spring.blaze.model.article.repository;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,6 +25,10 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
     List<Article> foo();
 
     List<ArticleLocalized> findAll(Specification<Article> specification,
+            @OptionalParam("locale") Locale locale,
+            @OptionalParam("defaultLocale") Locale defaultLocale);
+
+    Optional<ArticleLocalized> findOne(Specification<Article> specification,
             @OptionalParam("locale") Locale locale,
             @OptionalParam("defaultLocale") Locale defaultLocale);
 

@@ -1,4 +1,4 @@
-package to.lova.spring.blaze.model.common.entity;
+package to.lova.spring.blaze.model.article.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import to.lova.spring.blaze.model.article.entity.Article;
 import to.lova.spring.blaze.model.article.entity.Article_;
 
 @Entity

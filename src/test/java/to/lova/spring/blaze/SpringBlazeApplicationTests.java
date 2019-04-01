@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,13 +26,14 @@ import com.blazebit.persistence.view.EntityViewManager;
 import to.lova.spring.blaze.model.article.entity.Article;
 import to.lova.spring.blaze.model.article.entity.Article_;
 import to.lova.spring.blaze.model.article.entity.LocalizedString_;
+import to.lova.spring.blaze.model.article.entity.Person;
+import to.lova.spring.blaze.model.article.entity.Person_;
 import to.lova.spring.blaze.model.article.repository.ArticleRepository;
 import to.lova.spring.blaze.model.article.repository.ArticleViewRepository;
+import to.lova.spring.blaze.model.article.repository.PersonRepository;
+import to.lova.spring.blaze.model.article.repository.PersonViewRepository;
 import to.lova.spring.blaze.model.article.view.LocalizedStringView;
 import to.lova.spring.blaze.model.article.view.PersonView;
-import to.lova.spring.blaze.model.common.entity.Person;
-import to.lova.spring.blaze.model.common.repository.PersonRepository;
-import to.lova.spring.blaze.model.common.repository.PersonViewRepository;
 import to.lova.spring.blaze.model.customer.entity.Customer;
 import to.lova.spring.blaze.model.customer.entity.ServiceContractFilter;
 import to.lova.spring.blaze.model.customer.entity.ServiceContract_;
@@ -136,6 +138,7 @@ public class SpringBlazeApplicationTests {
     }
 
     @Test
+    @Disabled("PersonView no more updatable")
     public void testUpdatableEntityViewSave(
             @Autowired ArticleViewRepository repository) {
         var view = repository.findById(this.article.getId()).orElseThrow();
@@ -153,8 +156,9 @@ public class SpringBlazeApplicationTests {
         repository.findAll((root, query, builder) -> {
             Subquery<Article> subquery = query.subquery(Article.class);
             Root<Person> correlation = subquery.correlate(root);
-            Join<Person, Article> articles = correlation.join("articles");
-            Predicate predicate = builder.like(articles.get("title"), "FOO");
+            Join<Person, Article> articles = correlation.join(Person_.articles);
+            Predicate predicate = builder.like(articles.get(Article_.slug),
+                    "FOO");
             return builder.exists(subquery.select(articles).where(predicate));
         });
     }
@@ -174,8 +178,11 @@ public class SpringBlazeApplicationTests {
 
     @Test
     public void testFindOne(@Autowired ArticleRepository repository) {
-        var view = repository.findOne((root, query, builder) -> builder
-            .equal(root.get("id"), this.article.getId()));
+        var view = repository
+            .findOne(
+                    (root, query, builder) -> builder.equal(root.get("id"),
+                            this.article.getId()),
+                    Locale.ITALIAN, Locale.ENGLISH);
         assertNotNull(view);
     }
 

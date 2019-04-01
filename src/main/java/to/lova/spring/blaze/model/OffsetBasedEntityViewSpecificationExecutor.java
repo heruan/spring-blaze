@@ -1,4 +1,4 @@
-package to.lova.spring.blaze.model.common.repository;
+package to.lova.spring.blaze.model;
 
 import java.util.List;
 import java.util.Locale;

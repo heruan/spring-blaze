@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
-import to.lova.spring.blaze.model.common.entity.Person;
-
 @Entity
 public class Article implements Serializable {
 
