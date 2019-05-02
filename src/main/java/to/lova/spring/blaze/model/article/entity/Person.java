@@ -9,9 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import to.lova.spring.blaze.model.article.entity.Article_;
+import org.hibernate.envers.Audited;
 
 @Entity
+@Audited
 public class Person implements Serializable {
 
     @Id

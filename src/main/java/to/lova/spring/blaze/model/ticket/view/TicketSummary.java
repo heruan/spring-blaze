@@ -17,13 +17,14 @@ import com.blazebit.persistence.view.MappingCorrelatedSimple;
 import com.blazebit.persistence.view.MappingSubquery;
 import com.blazebit.persistence.view.SubqueryProvider;
 
+import to.lova.spring.blaze.model.common.view.AuditedView;
 import to.lova.spring.blaze.model.common.view.UserBase;
 import to.lova.spring.blaze.model.customer.view.AbstractCustomerBase;
 import to.lova.spring.blaze.model.ticket.entity.Ticket;
 import to.lova.spring.blaze.model.ticket.entity.TicketComment;
 
 @EntityView(Ticket.class)
-public interface TicketSummary {
+public interface TicketSummary extends AuditedView {
 
     @IdMapping
     Long getNumber();

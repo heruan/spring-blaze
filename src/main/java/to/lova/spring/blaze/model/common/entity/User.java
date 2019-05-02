@@ -18,7 +18,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
 @Entity
+@Audited
 public class User implements Serializable {
 
     @Id
@@ -38,6 +42,7 @@ public class User implements Serializable {
     private Set<Group> groups = new HashSet<>();
 
     @OneToMany(mappedBy = UserSession_.USER)
+    @NotAudited
     private List<UserSession> sessions = new ArrayList<>();
 
     public Long getId() {

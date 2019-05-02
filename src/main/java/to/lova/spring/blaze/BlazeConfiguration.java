@@ -1,14 +1,14 @@
 package to.lova.spring.blaze;
 
+import java.time.Instant;
+import java.util.Date;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.blazebit.persistence.Criteria;
@@ -30,18 +30,16 @@ public class BlazeConfiguration {
     private EntityManagerFactory entityManagerFactory;
 
     @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    @Lazy(false)
     public CriteriaBuilderFactory createCriteriaBuilderFactory() {
         CriteriaBuilderConfiguration config = Criteria.getDefault();
         return config.createCriteriaBuilderFactory(this.entityManagerFactory);
     }
 
     @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    @Lazy(false)
     public EntityViewManager createEntityViewManager(CriteriaBuilderFactory cbf,
             EntityViewConfiguration entityViewConfiguration) {
+        entityViewConfiguration.registerTypeConverter(Date.class, Instant.class,
+                new DateToInstantConverter());
         return entityViewConfiguration.createEntityViewManager(cbf);
     }
 

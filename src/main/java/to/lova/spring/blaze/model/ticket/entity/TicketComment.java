@@ -15,10 +15,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 
+import org.hibernate.envers.Audited;
+
 import to.lova.spring.blaze.model.article.entity.Attachment;
 import to.lova.spring.blaze.model.common.entity.User;
 
 @Entity
+@Audited
 public class TicketComment implements Serializable {
 
     @Id

@@ -16,7 +16,7 @@ import to.lova.spring.blaze.model.ticket.entity.Ticket;
 import to.lova.spring.blaze.model.ticket.view.TicketSummary;
 
 public interface TicketSummaryRepository
-        extends JpaRepository<TicketSummary, String>,
+        extends JpaRepository<TicketSummary, Long>,
         EntityViewSpecificationExecutor<TicketSummary, Ticket> {
 
     @Transactional(readOnly = true)

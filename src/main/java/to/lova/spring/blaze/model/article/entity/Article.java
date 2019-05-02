@@ -9,7 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
+import org.hibernate.envers.Audited;
+
 @Entity
+@Audited
 public class Article implements Serializable {
 
     @Id

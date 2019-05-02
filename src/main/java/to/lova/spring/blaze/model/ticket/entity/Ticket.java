@@ -15,10 +15,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Version;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 import to.lova.spring.blaze.model.common.entity.User;
 import to.lova.spring.blaze.model.customer.entity.AbstractCustomer;
 
 @Entity
+@Audited
 public class Ticket implements Serializable {
 
     @Id
@@ -31,6 +36,7 @@ public class Ticket implements Serializable {
     String subject;
 
     @ManyToOne
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     AbstractCustomer customer;
 
     @ManyToOne
@@ -49,6 +55,7 @@ public class Ticket implements Serializable {
 
     @OrderBy(TicketHistoryItem_.CREATED)
     @OneToMany(mappedBy = TicketHistoryItem_.TICKET)
+    @NotAudited
     SortedSet<TicketHistoryItem> history = new TreeSet<>();
 
     @OneToMany
