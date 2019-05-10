@@ -1,5 +1,6 @@
 package to.lova.spring.blaze;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.blazebit.persistence.view.EntityViewManager;
+import com.blazebit.persistence.view.EntityViewSetting;
 
 import to.lova.spring.blaze.model.article.entity.Article;
 import to.lova.spring.blaze.model.article.entity.Article_;
@@ -34,6 +36,7 @@ import to.lova.spring.blaze.model.article.repository.PersonRepository;
 import to.lova.spring.blaze.model.article.repository.PersonViewRepository;
 import to.lova.spring.blaze.model.article.view.LocalizedStringView;
 import to.lova.spring.blaze.model.article.view.PersonView;
+import to.lova.spring.blaze.model.common.entity.User;
 import to.lova.spring.blaze.model.customer.entity.Customer;
 import to.lova.spring.blaze.model.customer.entity.ServiceContractFilter;
 import to.lova.spring.blaze.model.customer.entity.ServiceContract_;
@@ -45,6 +48,7 @@ import to.lova.spring.blaze.model.customer.repository.ServiceItemRepository;
 import to.lova.spring.blaze.model.hotspot.entity.HotspotConfiguration;
 import to.lova.spring.blaze.model.hotspot.repository.ConfigurationRepository;
 import to.lova.spring.blaze.model.hotspot.repository.ConfigurationViewRepository;
+import to.lova.spring.blaze.model.ticket.entity.Ticket;
 import to.lova.spring.blaze.model.ticket.entity.TicketStatus;
 import to.lova.spring.blaze.model.ticket.entity.TicketStatus_;
 import to.lova.spring.blaze.model.ticket.repository.TicketDetailRepository;
@@ -52,6 +56,7 @@ import to.lova.spring.blaze.model.ticket.view.StatusDetail;
 import to.lova.spring.blaze.model.ticket.view.StatusDetailRepository;
 import to.lova.spring.blaze.model.ticket.view.StatusItem;
 import to.lova.spring.blaze.model.ticket.view.TicketDetailUpdatable;
+import to.lova.spring.blaze.model.ticket.view.TicketSummary;
 
 @DataJpaTest
 @ContextConfiguration(classes = BlazeConfiguration.class)
@@ -133,7 +138,7 @@ public class SpringBlazeApplicationTests {
         personRepository.save(person);
 
         var name = personRepository.findById(person.getId()).orElseThrow()
-            .getName();
+                .getName();
         assertEquals("Foo", name);
     }
 
@@ -146,7 +151,7 @@ public class SpringBlazeApplicationTests {
         repository.saveAndFlush(view);
 
         var name = repository.findById(this.article.getId()).orElseThrow()
-            .getAuthor().getName();
+                .getAuthor().getName();
         assertEquals("Foo", name);
     }
 
@@ -179,10 +184,10 @@ public class SpringBlazeApplicationTests {
     @Test
     public void testFindOne(@Autowired ArticleRepository repository) {
         var view = repository
-            .findOne(
-                    (root, query, builder) -> builder.equal(root.get("id"),
-                            this.article.getId()),
-                    Locale.ITALIAN, Locale.ENGLISH);
+                .findOne(
+                        (root, query, builder) -> builder.equal(root.get("id"),
+                                this.article.getId()),
+                        Locale.ITALIAN, Locale.ENGLISH);
         assertNotNull(view);
     }
 
@@ -192,18 +197,18 @@ public class SpringBlazeApplicationTests {
             @Autowired ConfigurationViewRepository viewRepository) {
         var c = repository.save(new HotspotConfiguration());
         var v = repository.findOne((root, query, builder) -> builder
-            .equal(root.get("id"), c.getId()));
+                .equal(root.get("id"), c.getId()));
         this.em.flush();
         this.em.clear();
         v.getLoginConfiguration().getWelcomeMessage().getLocalizedValues()
-            .put(Locale.ENGLISH, "foo");
+                .put(Locale.ENGLISH, "foo");
         v.getLoginConfiguration().getWelcomeMessage().getLocalizedValues()
-            .put(Locale.ITALIAN, "foo");
+                .put(Locale.ITALIAN, "foo");
         viewRepository.save(v);
         this.em.flush();
         this.em.clear();
         repository.findOne((root, query, builder) -> builder
-            .equal(root.get("id"), c.getId()));
+                .equal(root.get("id"), c.getId()));
     }
 
     @Test
@@ -230,7 +235,7 @@ public class SpringBlazeApplicationTests {
         customer.getServiceDetail().setServiceHours("foo");
         customerRepository.saveAndFlush(customer);
         var detail = customerRepository.findById(id).orElseThrow()
-            .getServiceDetail();
+                .getServiceDetail();
         assertEquals("foo", detail.getServiceHours());
     }
 
@@ -240,7 +245,7 @@ public class SpringBlazeApplicationTests {
         repository.findAll((r, q, b) -> {
             var sq = q.subquery(Boolean.class);
             var contract = sq.correlate(r).join(ServiceItem_.serviceContracts)
-                .get(ServiceContract_.id);
+                    .get(ServiceContract_.id);
             sq.select(b.literal(true)).where(b.equal(contract, "FOO"));
             return b.exists(sq);
         });
@@ -270,11 +275,11 @@ public class SpringBlazeApplicationTests {
             @Autowired ArticleRepository repository) {
         Specification<Article> specification = (root, query, builder) -> {
             var path = root.join(Article_.title)
-                .join(LocalizedString_.localizedValues);
+                    .join(LocalizedString_.localizedValues);
             return builder.like(builder.upper(path), "%I%");
         };
         var count = repository
-            .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
+                .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
         assertEquals(1, count);
     }
 
@@ -284,12 +289,12 @@ public class SpringBlazeApplicationTests {
         Specification<Article> specification = (root, query, builder) -> {
             var subquery = query.subquery(Boolean.class);
             var path = subquery.correlate(root).join(Article_.title)
-                .join(LocalizedString_.localizedValues);
+                    .join(LocalizedString_.localizedValues);
             var predicate = builder.like(builder.upper(path), "%I%");
             return builder.exists(subquery.where(predicate));
         };
         var count = repository
-            .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
+                .findAll(specification, Locale.ITALIAN, Locale.ENGLISH).size();
         assertEquals(1, count);
     }
 
@@ -308,7 +313,7 @@ public class SpringBlazeApplicationTests {
             var sqRoot = sq.from(TicketStatus.class);
             var next = sqRoot.join(TicketStatus_.next);
             sq.select(next)
-                .where(b.equal(sqRoot.get(TicketStatus_.id), s3.getId()));
+                    .where(b.equal(sqRoot.get(TicketStatus_.id), s3.getId()));
             return r.in(sq);
         });
     }
@@ -334,6 +339,18 @@ public class SpringBlazeApplicationTests {
         var view = repository.findById(this.article.getId()).get();
         view.setSlug("foo");
         repository.save(view);
+    }
+
+    @Test
+    public void testNullInheritanceMapping() {
+        var user = this.em.persist(new User());
+        var ticket = new Ticket();
+        var id = this.em.persistAndGetId(ticket);
+        var setting = EntityViewSetting.create(TicketSummary.class);
+        setting.addOptionalParameter("observer", user);
+        var summary = this.evm.find(this.em.getEntityManager(), setting, id);
+        var customer = summary.getCustomer();
+        assertNull(customer);
     }
 
 }

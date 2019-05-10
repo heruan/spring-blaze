@@ -2,6 +2,7 @@ package to.lova.spring.blaze.model.ticket.repository;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -31,5 +32,9 @@ public interface TicketSummaryRepository
     @Transactional(readOnly = true)
     List<TicketSummary> findAll(Specification<Ticket> spec,
             @OptionalParam("observer") User observer, Pageable pageable);
+
+    @Transactional(readOnly = true)
+    Optional<TicketSummary> findByNumber(long number,
+            @OptionalParam("observer") User observer);
 
 }

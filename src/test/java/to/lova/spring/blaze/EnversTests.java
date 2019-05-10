@@ -18,6 +18,8 @@ import to.lova.spring.blaze.model.article.entity.Person;
 import to.lova.spring.blaze.model.article.repository.ArticleRepository;
 import to.lova.spring.blaze.model.article.repository.ArticleViewRepository;
 import to.lova.spring.blaze.model.article.repository.PersonRepository;
+import to.lova.spring.blaze.model.common.entity.User;
+import to.lova.spring.blaze.model.common.repository.UserRepository;
 import to.lova.spring.blaze.model.ticket.repository.TicketDetailRepository;
 import to.lova.spring.blaze.model.ticket.repository.TicketSummaryRepository;
 import to.lova.spring.blaze.model.ticket.view.TicketDetailUpdatable;
@@ -64,11 +66,14 @@ public class EnversTests {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public void ticketSummaryHasEnversMetadata(
             @Autowired TicketDetailRepository ticketDetailRepository,
-            @Autowired TicketSummaryRepository ticketSummaryRepository) {
+            @Autowired TicketSummaryRepository ticketSummaryRepository,
+            @Autowired UserRepository userRepository) {
+        var user = userRepository.save(new User());
         var ticket = this.evm.create(TicketDetailUpdatable.class);
         var number = ticketDetailRepository.saveAndFlush(ticket).getNumber();
 
-        var summary = ticketSummaryRepository.getOne(number);
+        var summary = ticketSummaryRepository.findByNumber(number, user)
+                .orElseThrow();
 
         var metadata = summary.getCreationMetadata();
         assertNotNull(metadata);

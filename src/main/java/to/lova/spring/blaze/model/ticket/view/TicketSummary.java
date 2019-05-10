@@ -19,7 +19,7 @@ import com.blazebit.persistence.view.SubqueryProvider;
 
 import to.lova.spring.blaze.model.common.view.AuditedView;
 import to.lova.spring.blaze.model.common.view.UserBase;
-import to.lova.spring.blaze.model.customer.view.AbstractCustomerBase;
+import to.lova.spring.blaze.model.customer.view.AbstractCustomerDetail;
 import to.lova.spring.blaze.model.ticket.entity.Ticket;
 import to.lova.spring.blaze.model.ticket.entity.TicketComment;
 
@@ -40,7 +40,7 @@ public interface TicketSummary extends AuditedView {
     @Mapping(value = "comments.author", fetch = FetchStrategy.SUBSELECT)
     Set<UserBase> getCommentAuthors();
 
-    AbstractCustomerBase getCustomer();
+    AbstractCustomerDetail getCustomer();
 
     @MappingSubquery(value = SeenProvider.class, subqueryAlias = "seen",
             expression = "coalesce(seen, false)")
