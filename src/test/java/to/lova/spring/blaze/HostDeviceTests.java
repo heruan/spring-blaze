@@ -22,8 +22,7 @@ public class HostDeviceTests {
 
     @Test
     public void lastValueProviderTest() {
-        this.evm.find(this.em.getEntityManager(), HostDeviceWithItems.class,
-                123);
+        this.evm.find(this.em.getEntityManager(), HostDeviceWithItems.class, 123L);
     }
 
 }
